@@ -70,13 +70,7 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                            @if($errors->any())
-                                                <div class="alert alert-danger">
-                                                    @error('message')
-                                                    {{ $message }}
-                                                    @enderror
-                                                </div>
-                                            @endif
+                                            @include('admin.layout.messages')
                                         </div><!-- End: .card-body -->
                                     </div><!-- End: .card -->
                                 </div><!-- End: .edit-profile -->
