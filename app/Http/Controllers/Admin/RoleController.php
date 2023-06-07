@@ -24,15 +24,23 @@ class RoleController extends Controller
         return view('admin.roles.create', compact('allPermissions', 'permissionGroups'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:100|unique:roles'
+        ], [
+            'name.requried' => 'Please give a role name'
+        ]);
+
+        $role = Role::create(['name' => $request->name]);
+        $permissions = $request->input('permissions');
+
+        if (!empty($permissions)) {
+            $role->permissions()->sync($permissions);
+        }
+
+        return back()->with("success","Role has been created !!");
     }
 
     /**
