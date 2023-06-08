@@ -5,15 +5,42 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
     public function index()
     {
         $roles = Role::all();
+
         return view('admin.roles.index', compact('roles'));
+    }
+
+    public function rolesList(Request $request)
+    {
+        $roles = Role::latest()->get();
+
+        return DataTables::of($roles)
+            ->addIndexColumn()
+            ->editColumn('permission', function ($roles){
+                $permissions = '';
+                foreach ($roles->permissions as $permission) {
+                    $permissions .= '<span class="badge badge-round badge-success badge-lg mr-1">' . $permission->name . '</span>';
+                }
+
+                return $permissions;
+            })
+            ->addColumn('action', function($roles){
+                $actionBtn = '<div class="actions">
+                                    <a class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
+                                    <a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
+                                </div>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action','permission'])
+            ->make(true);
     }
 
     public function create()
@@ -43,48 +70,28 @@ class RoleController extends Controller
         return back()->with("success","Role has been created !!");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        //
+        $role = Role::find($id);
+
+        if (!is_null($role)){
+            $role->permissions()->detach();
+            $role->delete();
+        }
+
+        return response()->json(['message' => 'Role Deleted successfully'], 200);
     }
 }

@@ -2,10 +2,6 @@
 
 @section('styles')
     <!-- Start datatable css -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
 @endsection
 
 @section('content')
@@ -22,42 +18,16 @@
                         <div class="clearfix"></div>
                         <div class="data-tables">
                             @include('admin.layout.messages')
-                            <table id="dataTable" class="text-center">
-                                <thead class="text-capitalize">
+                            <table class="table table-bordered yajra-datatable">
+                                <thead>
                                 <tr>
-                                    <th width="5%">Sl</th>
-                                    <th width="10%">Name</th>
-                                    <th width="60%">Permissions</th>
-                                    <th width="15%">Action</th>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Permissions</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($roles as $role)
-                                    <tr>
-                                        <td>{{ $loop->index+1 }}</td>
-                                        <td>{{ $role->name }}</td>
-                                        <td>
-                                            @foreach ($role->permissions as $perm)
-                                                <span class="badge badge-round badge-info badge-lg mr-1">
-                                                {{ $perm->name }}
-                                            </span>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            <a class="mr-2 btn btn-success btn-sm btn-squared btn-transparent-success " href="{{ route('admin.roles.edit', $role->id) }}">Edit</a>
-
-                                            <a class="btn btn-secondary btn-sm btn-squared btn-transparent-secondary " href="{{ route('admin.roles.destroy', $role->id) }}"
-                                               onclick="event.preventDefault(); document.getElementById('delete-form-{{ $role->id }}').submit();">
-                                                Delete
-                                            </a>
-
-                                            <form id="delete-form-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" style="display: none;">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -69,17 +39,56 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
-
     <script>
-        if ($('#dataTable').length) {
-            $('#dataTable').DataTable({
-                responsive: true
+        let table;
+
+        $(document).ready(function() {
+            table = $('.yajra-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: {
+                    url: "{{ route('admin.roles.list') }}",
+                    type: "POST",
+                    dataType: "json",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    error: function (error) {
+
+                    }
+                },
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex', width: '10%'},
+                    {data: 'name', name: 'name', width: '10%'},
+                    {data: 'permission', name: 'permission', width: '60%'},
+                    {data: 'action', name: 'action', width: '20%'},
+                ]
             });
-        }
+        });
+
+        $(document).on("click",'#delete_btn',function (e){
+            e.preventDefault();
+
+            if (confirm('Are you sure you want to delete this role?')) {
+                let roleId = $(this).data('role-id');
+
+                $.ajax({
+                    url: "{{ route('admin.roles.destroy', ':id') }}".replace(':id', roleId),
+                    type: "POST",
+                    data: {
+                        _method: "DELETE",
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function (response) {
+                        toastr.success('Role deleted successfully!');
+                        table.ajax.reload();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        toastr.error('Error deleting role: ' + errorThrown);
+                    }
+                });
+            }
+        })
     </script>
 @endsection

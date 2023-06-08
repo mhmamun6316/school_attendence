@@ -28,4 +28,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     //roles route
     Route::resource('roles',RoleController::class);
+    Route::post('/roles/list',[RoleController::class,'rolesList'])->name('roles.list');
 });
