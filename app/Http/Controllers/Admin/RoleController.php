@@ -14,7 +14,6 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -34,7 +33,7 @@ class RoleController extends Controller
             })
             ->addColumn('action', function($roles){
                 $actionBtn = '<div class="actions">
-                                    <a class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
+                                    <a href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
                                     <a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
                                 </div>';
                 return $actionBtn;
@@ -67,19 +66,38 @@ class RoleController extends Controller
             $role->permissions()->sync($permissions);
         }
 
-        return back()->with("success","Role has been created !!");
+        return redirect()->route('admin.roles.index')->with("success","Role has been created !!");
     }
 
 
     public function edit($id)
     {
-        //
+        $role = Role::find($id);
+        $allPermissions  = Permission::all();
+        $permissionGroups= Permission::permissionGroups();
+
+        return view('admin.roles.edit', compact('role','allPermissions', 'permissionGroups'));
     }
 
 
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:100|unique:roles,name,' . $id
+        ], [
+            'name.requried' => 'Please give a role name'
+        ]);
+
+        $role = Role::find($id);
+        $permissions = $request->input('permissions');
+
+        if (!empty($permissions)) {
+            $role->name = $request->name;
+            $role->save();
+            $role->permissions()->sync($permissions);
+        }
+
+        return redirect()->route('admin.roles.index')->with("success","Role has been updated !!");
     }
 
 

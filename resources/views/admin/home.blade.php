@@ -24,8 +24,6 @@
                         </div>
                     </div>
                 </div>
-
-                @include('admin.layout.messages')
             </div>
         </div>
     </div>

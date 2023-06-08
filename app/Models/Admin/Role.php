@@ -21,4 +21,9 @@ class Role extends Model
     {
         $this->permissions()->attach($permission);
     }
+
+    public function hasPermissionTo($permissionName)
+    {
+        return $this->permissions()->where('name', $permissionName)->exists();
+    }
 }

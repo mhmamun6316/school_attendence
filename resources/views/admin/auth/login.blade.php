@@ -70,7 +70,6 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                            @include('admin.layout.messages')
                                         </div><!-- End: .card-body -->
                                     </div><!-- End: .card -->
                                 </div><!-- End: .edit-profile -->

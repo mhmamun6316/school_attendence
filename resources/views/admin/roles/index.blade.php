@@ -8,7 +8,7 @@
     <div class="main-content-inner">
         <div class="row">
             <!-- data table start -->
-            <div class="col-12 mt-5">
+            <div class="col-12 mt-4">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="header-title float-left">Roles List</h4>
@@ -17,7 +17,6 @@
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">
-                            @include('admin.layout.messages')
                             <table class="table table-bordered yajra-datatable">
                                 <thead>
                                 <tr>

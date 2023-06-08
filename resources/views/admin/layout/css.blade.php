@@ -15,6 +15,7 @@
     .sidebar .menu-text {
         font-size: 16px;
     }
+    /*datatable customization css start*/
     .dataTables_wrapper .sorting,
     .dataTables_wrapper .sorting_asc,
     .dataTables_wrapper .sorting_desc{
@@ -43,4 +44,23 @@
         color: white;
         margin: 5px;
     }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button{
+        padding: 1px 2px!important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+        border: 1px solid #ffffff;
+        background: none!important;
+    }
+
+    .page-link{
+        padding: 6px 14px;
+        border-radius: 4px;
+    }
+
+    .page-item.active .page-link{
+        background-color: #5f63f2;
+    }
+
 </style>
