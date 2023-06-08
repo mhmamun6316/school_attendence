@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend') }}/img/favicon.png">
 
-    @yield('css')
+    @yield('styles')
 </head>
 
 <body class="layout-light side-menu overlayScroll">
@@ -35,7 +35,7 @@
         </div>
 
     </div>
-    @include('admin.layout.footer')
+{{--    @include('admin.layout.footer')--}}
 </main>
 <div id="overlayer">
     @include('admin.layout.overlay')
