@@ -19,6 +19,7 @@
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
+                    table.ajax.reload();
                     $('#add_user_modal').modal('hide');
                     toastr.success(response.success);
                 },
@@ -37,9 +38,8 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                var formattedData = formatOrganizationData(response);
-
-                $('#organization_tree').jstree({
+                let formattedData = formatOrganizationData(response);
+                $('.organization_tree').jstree({
                     core: {
                         data: formattedData
                     },
@@ -52,7 +52,7 @@
                 }).on('select_node.jstree', function(e, data) {
                     let selectedOrganizationId = data.node.id;
 
-                    $('#selected_organization').val(selectedOrganizationId);
+                    $('.selected_organization').val(selectedOrganizationId);
                 });
             },
             error: function(xhr) {
@@ -62,13 +62,13 @@
     }
 
     function formatOrganizationData(data) {
-        var formattedData = [];
+        let formattedData = [];
 
         function formatChildren(children) {
-            var formattedChildren = [];
+            let formattedChildren = [];
 
             children.forEach(function(child) {
-                var formattedChild = {
+                let formattedChild = {
                     id: child.id,
                     text: child.name,
                     address: child.address,
@@ -89,7 +89,7 @@
         }
 
         data.forEach(function(org) {
-            var formattedOrg = {
+            let formattedOrg = {
                 id: org.id,
                 text: org.name,
                 address: org.address,

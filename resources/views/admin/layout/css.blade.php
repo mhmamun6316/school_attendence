@@ -70,4 +70,14 @@
         background-position: center center;
         background-size: auto;
     }
+
+    /* badge */
+    .custom-badge{
+        height: 20px;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 15px;
+        color: #fff;
+        background-color: #20c997;
+    }
 </style>

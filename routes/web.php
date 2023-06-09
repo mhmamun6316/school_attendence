@@ -21,14 +21,14 @@ Route::prefix('admin')->name('admin.')->middleware(['guest'])->group(function ()
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'store'])->name('login.submit');
 });
-
+Route::get('/',[DashboardController::class,'index'])->name('dashboard')->middleware('auth');
 
 //authenticated route
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::post('/logout',[DashboardController::class,'logout'])->name('logout');
 
     Route::resource('users',UserController::class);
+    Route::post('/users/list',[UserController::class,'usersList'])->name('users.list');
 
     Route::resource('roles',RoleController::class);
     Route::post('/roles/list',[RoleController::class,'rolesList'])->name('roles.list');

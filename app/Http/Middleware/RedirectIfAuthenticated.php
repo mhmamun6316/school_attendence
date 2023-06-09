@@ -17,7 +17,7 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $redirectTo = '/admin/dashboard')
+    public function handle(Request $request, Closure $next, $redirectTo = '/')
     {
         if (Auth::check()) {
             return redirect($redirectTo);

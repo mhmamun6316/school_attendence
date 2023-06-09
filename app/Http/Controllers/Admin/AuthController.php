@@ -21,7 +21,7 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('admin.dashboard')->with('success', 'You have successfully logged in.');;
+            return redirect()->route('dashboard')->with('success', 'You have successfully logged in.');;
         } else {
             // Authentication failed
             return redirect()->back()->withErrors(['message' => 'Username or password dont match']);

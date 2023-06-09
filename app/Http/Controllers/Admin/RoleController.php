@@ -35,7 +35,7 @@ class RoleController extends Controller
             })
             ->addColumn('action', function($roles){
                 $actionBtn = '<div class="actions">
-                                    <a href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
+                                    <a id="edit_btn" href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
                                     <a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
                                 </div>';
                 return $actionBtn;
