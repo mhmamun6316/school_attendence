@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'organization_id'
     ];
 
     /**
@@ -55,7 +56,6 @@ class User extends Authenticatable
         $this->roles()->attach($role);
     }
 
-
     public static function getpermissionsByGroupName($group_name)
     {
         $permissions = DB::table('permissions')
@@ -73,5 +73,4 @@ class User extends Authenticatable
 
         return count(array_diff($permissionNames, $rolePermissions)) === 0;
     }
-
 }

@@ -2,14 +2,7 @@
 
 @section('styles')
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
-
     <style>
-        .jstree-icon.jstree-themeicon.jstree-themeicon-custom {
-            background-image: url('//jstree.com/tree-icon.png');
-            background-position: center center;
-            background-size: auto;
-        }
         button{
             margin: 5px;
         }
@@ -134,8 +127,6 @@
 @endsection
 
 @section('script')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/jstree.min.js"></script>
-
     <script>
         $(document).ready(function (){
             let csrfToken = $('meta[name="csrf-token"]').attr('content');

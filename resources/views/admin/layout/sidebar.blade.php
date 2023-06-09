@@ -27,5 +27,11 @@
                 <span class="menu-text">Organizations</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('admin.users.index') }}">
+                <span data-feather="home" class="nav-icon"></span>
+                <span class="menu-text">Admins</span>
+            </a>
+        </li>
     </ul>
 </div>

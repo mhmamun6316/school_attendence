@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{{ asset('backend/css/style.css') }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend') }}/img/favicon.png">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
 
 <style>
     .sidebar .menu-text {
@@ -63,4 +64,10 @@
         background-color: #5f63f2;
     }
 
+    /*js tree css*/
+    .jstree-icon.jstree-themeicon.jstree-themeicon-custom {
+        background-image: url('//jstree.com/tree-icon.png');
+        background-position: center center;
+        background-size: auto;
+    }
 </style>
