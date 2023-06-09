@@ -30,5 +30,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('roles',RoleController::class);
     Route::post('/roles/list',[RoleController::class,'rolesList'])->name('roles.list');
 
+    Route::get('/organizations/list',[OrganizationController::class,'organizationList'])->name('organizations.list');
     Route::resource('organizations',OrganizationController::class);
 });
