@@ -33,6 +33,27 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal-info-delete modal fade show" id="delete_roles_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-info" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="modal-info-body d-flex">
+                                <div class="modal-info-icon warning">
+                                    <span data-feather="info"></span>
+                                </div>
+                                <div class="modal-info-text">
+                                    <h6>Do you Want to delete that role?</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger btn-outlined btn-sm" data-dismiss="modal">No</button>
+                            <button type="button" id="confirm_delete" class="btn btn-success btn-outlined btn-sm" data-dismiss="modal">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -67,27 +88,32 @@
         });
 
         $(document).on("click",'#delete_btn',function (e){
-            e.preventDefault();
-
-            if (confirm('Are you sure you want to delete this role?')) {
-                let roleId = $(this).data('role-id');
-
-                $.ajax({
-                    url: "{{ route('admin.roles.destroy', ':id') }}".replace(':id', roleId),
-                    type: "POST",
-                    data: {
-                        _method: "DELETE",
-                        _token: "{{ csrf_token() }}"
-                    },
-                    success: function (response) {
-                        toastr.success('Role deleted successfully!');
-                        table.ajax.reload();
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        toastr.error('Error deleting role: ' + errorThrown);
-                    }
-                });
-            }
+            let roleId = $(this).data('role-id');
+            $('#confirm_delete').data('role-id', roleId);
+            $('#delete_roles_modal').modal('show');
         })
+
+        $('#confirm_delete').on('click', function() {
+            let roleId = $(this).data('role-id');
+
+            $.ajax({
+                url: "{{ route('admin.roles.destroy', ':id') }}".replace(':id', roleId),
+                type: "POST",
+                data: {
+                    _method: "DELETE",
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function (response) {
+                    toastr.success(response.success);
+                    table.ajax.reload();
+                },
+                error: function(xhr) {
+                    let errorResponse = JSON.parse(xhr.responseText);
+                    let errorMessage = errorResponse.error;
+
+                    toastr.error(errorMessage);
+                }
+            });
+        });
     </script>
 @endsection
