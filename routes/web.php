@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\OrganizationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,7 +27,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
     Route::post('/logout',[DashboardController::class,'logout'])->name('logout');
 
-    //roles route
     Route::resource('roles',RoleController::class);
     Route::post('/roles/list',[RoleController::class,'rolesList'])->name('roles.list');
+
+    Route::resource('organizations',OrganizationController::class);
 });
