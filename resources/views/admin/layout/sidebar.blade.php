@@ -21,20 +21,11 @@
                 </li>
             </ul>
         </li>
-        <li class="has-child">
-            <a href="#" class="">
-                <span data-feather="database" class="nav-icon"></span>
+        <li>
+            <a href="{{ route('admin.organizations.index') }}">
+                <span data-feather="home" class="nav-icon"></span>
                 <span class="menu-text">Organizations</span>
-                <span class="toggle-icon"></span>
             </a>
-            <ul>
-                <li>
-                    <a class="" href="{{ route('admin.organizations.index') }}">All Organizations</a>
-                </li>
-                <li>
-                    <a class="" href="{{ route('admin.organizations.create') }}">Create Organization</a>
-                </li>
-            </ul>
         </li>
     </ul>
 </div>

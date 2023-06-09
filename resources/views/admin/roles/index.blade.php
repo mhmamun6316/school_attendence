@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Roles List</h4>
                         <p class="float-right mb-2">
-                            <a class="btn btn-primary text-white" href="{{ route('admin.roles.create') }}">Create New Role</a>
+                            <a class="btn btn-sm btn-primary text-white" href="{{ route('admin.roles.create') }}">Create New Role</a>
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">
