@@ -20,9 +20,9 @@ class DashboardController extends Controller
         $currentDate = Carbon::now()->format('M d, Y');
         $roles = Role::count();
         $permissions = Permission::count();
-        $admins = User::count();
+        $admins = User::FilterByOrganization()->count();
         $organizations = Organization::count();
-        $devices = Device::count();
+        $devices = Device::FilterByOrganization()->count();
         $packages = Package::count();
 
         return view('admin.home',compact([
