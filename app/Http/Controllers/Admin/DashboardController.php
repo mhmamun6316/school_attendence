@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Device;
 use App\Models\Admin\Organization;
 use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
@@ -20,8 +21,11 @@ class DashboardController extends Controller
         $permissions = Permission::count();
         $admins = User::count();
         $organizations = Organization::count();
+        $devices = Device::count();
 
-        return view('admin.home',compact('currentDate','roles','permissions','admins','organizations'));
+        return view('admin.home',compact([
+            'currentDate','roles','permissions','admins','organizations','devices']
+        ));
     }
 
     public function logout(Request $request)

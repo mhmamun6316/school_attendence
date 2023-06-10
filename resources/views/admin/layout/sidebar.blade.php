@@ -36,7 +36,7 @@
         <li>
             <a href="{{ route('admin.devices.index') }}">
                 <span data-feather="home" class="nav-icon"></span>
-                <span class="menu-text">Admins</span>
+                <span class="menu-text">Devices</span>
             </a>
         </li>
     </ul>
