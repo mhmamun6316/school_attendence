@@ -38,6 +38,7 @@
                     </div>
                 </div>
 
+                @permission('dashboard.view')
                 <div class="card  card-md mb-30 shadow1">
                     <div class="card-body p-30">
                         <div class="d-flex flex-wrap m-n10 ">
@@ -69,6 +70,7 @@
                         <!-- ends: .atbd-button-list" -->
                     </div>
                 </div>
+                @endpermission
             </div>
         </div>
     </div>
