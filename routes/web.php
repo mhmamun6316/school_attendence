@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\DeviceController;
+use App\Http\Controllers\Admin\PackageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::resource('devices',DeviceController::class);
     Route::post('/devices/list',[DeviceController::class,'deviceList'])->name('devices.list');
+
+    Route::resource('packages',PackageController::class);
+    Route::post('/packages/list',[PackageController::class,'packageList'])->name('packages.list');
 });

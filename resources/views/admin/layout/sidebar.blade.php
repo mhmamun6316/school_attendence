@@ -39,5 +39,11 @@
                 <span class="menu-text">Devices</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('admin.packages.index') }}">
+                <span data-feather="home" class="nav-icon"></span>
+                <span class="menu-text">Packages</span>
+            </a>
+        </li>
     </ul>
 </div>
