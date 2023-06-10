@@ -63,5 +63,14 @@
             </a>
         </li>
         @endpermission
+
+        @permission('package.view')
+        <li>
+            <a href="{{ route('admin.students.index') }}">
+                <span data-feather="home" class="nav-icon"></span>
+                <span class="menu-text">Students</span>
+            </a>
+        </li>
+        @endpermission
     </ul>
 </div>

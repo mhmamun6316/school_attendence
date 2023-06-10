@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::resource('packages',PackageController::class);
     Route::post('/packages/list',[PackageController::class,'packageList'])->name('packages.list');
+
+    Route::resource('students',StudentController::class);
+    Route::post('/students/list',[StudentController::class,'studentList'])->name('students.list');
 });
