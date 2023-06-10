@@ -1,9 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.js-example-basic-multiple').select2();
-    });
-</script>
 <script>
     let csrfToken = $('meta[name="csrf-token"]').attr('content');
     let table;
@@ -14,7 +8,7 @@
             serverSide: true,
             responsive: true,
             ajax: {
-                url: "{{ route('admin.packages.list') }}",
+                url: "{{ route('admin.students.list') }}",
                 type: "POST",
                 dataType: "json",
                 headers: {
@@ -26,38 +20,39 @@
                     if(error){
                         toastr.error(error);
                     } else {
-                        toastr.error('Error fetching packages. Please try again.');
+                        toastr.error('Error fetching students. Please try again.');
                     }
                 }
             },
             columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex', width: '10%'},
-                {data: 'name', name: 'name', width: '20%'},
-                {data: 'price', name: 'price',width: '20%'},
-                {data: 'categories', name: 'categories',width: '30%'},
-                {data: 'action', name: 'action', width: '20%'},
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'email', name: 'email'},
+                {data: 'phone', name: 'phone'},
+                {data: 'organization', name: 'organization'},
+                {data: 'organization', name: 'organization'},
+                {data: 'action', name: 'action'},
             ]
         });
 
-        $('#add_package_btn').on('click', function() {
-            $('.multi-select').val([]);
-            $('#add_package_modal').modal('show');
+        $('#add_user_btn').on('click', function() {
+            $('#add_user_modal').modal('show');
         });
 
-        $('#package_form').on('submit', function(e) {
+        $('#user_form').on('submit', function(e) {
             e.preventDefault();
 
             let formData = $(this).serialize();
             formData += '&_token=' + $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
-                url: "{{ route('admin.packages.store') }}",
+                url: "{{ route('admin.users.store') }}",
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
                     table.ajax.reload();
-                    $('#add_package_modal').modal('hide');
+                    $('#add_user_modal').modal('hide');
                     toastr.success(response.success);
                 },
                 error: function (xhr) {
@@ -66,7 +61,7 @@
                     if(error){
                         toastr.error(error);
                     } else {
-                        toastr.error('Error storing package. Please try again.');
+                        toastr.error('Error storing admin. Please try again.');
                     }
                 }
             });
@@ -76,45 +71,47 @@
     $(document).on('click', '#edit_btn', function(e) {
         e.preventDefault();
 
-        let packageId = $(this).data('package-id');
+        let userId = $(this).data('user-id');
 
         $.ajax({
-            url: "{{ route('admin.packages.edit',':id') }}".replace(':id',packageId),
+            url: "{{ route('admin.users.edit',':id') }}".replace(':id',userId),
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                let selectedCategories = response.package.categories.map(function(category) {
-                    return category.id.toString();
-                });
-                let packaged = response.package;
-                $('.js-example-basic-multiple').val(selectedCategories).trigger('change');
-                $('#edit_package_modal #package_id').val(packaged.id);
-                $('#edit_package_modal #package_name').val(packaged.name);
-                $('#edit_package_modal #package_price').val(packaged.price);
+                let user = response.user;
+                $('#edit_user_modal #user_id').val(user.id);
+                $('#edit_user_modal #user_name').val(user.name);
+                $('#edit_user_modal #user_email').val(user.email);
+                $('#edit_user_modal #user_role').val(user.role_id);
 
-                $('#edit_package_modal').modal('show');
+                let organizationTree = $('#edit_user_modal .organization_tree');
+                organizationTree.jstree('deselect_all');
+                organizationTree.jstree('select_node', user.organization_id);
+
+                // Open the modal
+                $('#edit_user_modal').modal('show');
             },
             error: function(xhr) {
-                toastr.error('Error loading package data. Please try again.');
+                toastr.error('Error loading admin data. Please try again.');
             }
         });
     });
 
-    $(document).on("submit",'#edit_package_form',function (e){
+    $(document).on("submit",'#edit_user_form',function (e){
         e.preventDefault();
-        let packageId = $('#package_id').val();
+        let userId = $('#user_id').val();
         let formData = $(this).serialize();
 
         formData += '&_token=' + $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: "{{ route('admin.packages.update',':id') }}".replace(':id',packageId),
+            url: "{{ route('admin.users.update',':id') }}".replace(':id',userId),
             type: 'PUT',
             data: formData,
             dataType: 'json',
             success: function(response) {
                 table.ajax.reload();
-                $('#edit_package_modal').modal('hide');
+                $('#edit_user_modal').modal('hide');
                 toastr.success(response.success);
             },
             error: function(xhr) {
@@ -123,23 +120,23 @@
                 if(error){
                     toastr.error(error);
                 } else {
-                    toastr.error('Error updating package. Please try again.');
+                    toastr.error('Error updating admin. Please try again.');
                 }
             }
         });
     });
 
     $(document).on("click",'#delete_btn',function (e){
-        let packageId = $(this).data('package-id');
-        $('#confirm_delete').data('package-id', packageId);
-        $('#delete_package_modal').modal('show');
+        let userId = $(this).data('user-id');
+        $('#confirm_delete').data('user-id', userId);
+        $('#delete_user_modal').modal('show');
     })
 
     $('#confirm_delete').on('click', function() {
-        let packageId = $(this).data('package-id');
+        let userId = $(this).data('user-id');
 
         $.ajax({
-            url: "{{ route('admin.packages.destroy', ':id') }}".replace(':id', packageId),
+            url: "{{ route('admin.users.destroy', ':id') }}".replace(':id', userId),
             type: "POST",
             data: {
                 _method: "DELETE",
@@ -155,7 +152,7 @@
                 if(error){
                     toastr.error(error);
                 } else {
-                    toastr.error('Error deleting package. Please try again.');
+                    toastr.error('Error deleting admin. Please try again.');
                 }
             }
         });

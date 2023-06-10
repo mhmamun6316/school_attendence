@@ -1,12 +1,7 @@
 @extends('admin.master')
 
 @section('styles')
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <style>
-        .select2-container {
-            z-index: 9999 !important;
-        }
-    </style>
+    <!-- Start datatable css -->
 @endsection
 
 @section('content')
@@ -16,10 +11,10 @@
             <div class="col-12 mt-4">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title float-left">Packages List</h4>
+                        <h4 class="header-title float-left">Students List</h4>
                         <p class="float-right mb-2">
-                            @permission('package.create')
-                                <button id="add_package_btn" class="btn btn-primary btn-sm">Add Package</button>
+                            @permission('admin.create')
+                            <button id="add_user_btn" class="btn btn-primary btn-sm">Add Student</button>
                             @endpermission
                         </p>
                         <div class="clearfix"></div>
@@ -29,8 +24,10 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Categories</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Organization</th>
+                                    <th>Package</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -42,33 +39,44 @@
                 </div>
             </div>
 
-            {{--adding package modal--}}
-            <div class="modal-basic modal fade show" id="add_package_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-md" role="document">
+            {{--adding user modal--}}
+            <div class="modal-basic modal fade show" id="add_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
-                            <h6 class="modal-title">Add New Packages</h6>
+                            <h6 class="modal-title">Add New Users</h6>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span data-feather="x"></span></button>
                         </div>
-                        <form id="package_form">
+                        <form id="user_form">
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input placeholder="enter a name" type="text" class="form-control" id="name" name="name" required>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Name</label>
+                                            <input placeholder="enter a name" type="text" class="form-control" id="name" name="name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input placeholder="enter email address" type="email" class="form-control" id="email" name="email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control" id="role" name="role_id" required>
+                                                <option selected value="">Please select a role</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Package Price</label>
-                                    <input placeholder="enter package price" type="text" class="form-control" id="price" name="price" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="categories">Categories</label>
-                                    <select class="js-example-basic-multiple" name="categories[]" multiple="multiple">
-                                        <option value="" disabled>Please select a category</option>
-                                        @foreach($categories as $category)
-                                            <option  value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="organization">Organization</label>
+                                    <div class="jstree organization_tree"></div>
+                                    <input type="hidden" class="selected_organization" name="organization_id">
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -80,34 +88,45 @@
                 </div>
             </div>
 
-            {{--editing package modal--}}
-            <div class="modal-basic modal fade show" id="edit_package_modal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-md" role="document">
+            {{--editing user modal--}}
+            <div class="modal-basic modal fade show" id="edit_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
-                            <h6 class="modal-title">Edit New Packages</h6>
+                            <h6 class="modal-title">Edit New Users</h6>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span data-feather="x"></span></button>
                         </div>
-                        <form id="edit_package_form" method="POST">
+                        <form id="edit_user_form" method="POST">
                             <div class="modal-body">
-                                <input type="hidden" name="package_id" id="package_id">
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input placeholder="enter a name" type="text" class="form-control" id="package_name" name="name" required>
+                                <input type="hidden" name="user_id" id="user_id">
+                                <input type="hidden" class="selected_organization" name="organization_id">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="name">Name</label>
+                                            <input placeholder="enter a name" type="text" class="form-control" id="user_name" name="name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input placeholder="enter email address" type="email" class="form-control" id="user_email" name="email" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="role">Role</label>
+                                            <select class="form-control" id="user_role" name="role_id" required>
+                                                <option selected value="">Please select a role</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">Package Price</label>
-                                    <input placeholder="enter package price" type="text" class="form-control" id="package_price" name="price" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="categories">Categories</label>
-                                    <select class="js-example-basic-multiple" name="categories[]" multiple="multiple">
-                                        <option value="" disabled>Please select a category</option>
-                                        @foreach($categories as $category)
-                                            <option  value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="organization_tree">Organization</label>
+                                    <div class="jstree organization_tree"></div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -120,7 +139,7 @@
             </div>
 
             {{--confirm modal--}}
-            <div class="modal-info-delete modal fade show" id="delete_package_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-info-delete modal fade show" id="delete_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-info" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -129,7 +148,7 @@
                                     <span data-feather="info"></span>
                                 </div>
                                 <div class="modal-info-text">
-                                    <h6>Do you Want to delete that package?</h6>
+                                    <h6>Do you Want to delete that user?</h6>
                                 </div>
                             </div>
                         </div>
@@ -146,6 +165,6 @@
 
 @section('script')
 
-    @include('admin.package.partials.script')
+    @include('admin.student.partials.script')
 
 @endsection

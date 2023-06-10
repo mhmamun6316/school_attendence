@@ -43,24 +43,20 @@ class RoleController extends Controller
 
                 return $permissions;
             })
-            ->addColumn('action', function($roles){
-                $actionBtn = '<div class="actions">
-                                    <a id="edit_btn" href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
-                                    <a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
-                                </div>';
-                return $actionBtn;
-
+            ->addColumn('action', function($roles) use ($authUser){
                 $actionBtn = '<div class="actions">';
 
-                if ($authUser->isSuperAdmin() || $authUser->hasPermission('device.edit')) {
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('role.edit')) {
                     $actionBtn .= '<a id="edit_btn" href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>';
                 }
 
-                if ($authUser->isSuperAdmin() || $authUser->hasPermission('device.delete')) {
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('role.delete')) {
                     $actionBtn .= '<a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>';
                 }
 
                 $actionBtn .= '</div>';
+
+                return $actionBtn;
             })
             ->rawColumns(['action','permission'])
             ->make(true);
