@@ -1,7 +1,7 @@
 <div class="sidebar__menu-group">
     <ul class="sidebar_nav">
         <li>
-            <a href="#" class="active">
+            <a href="{{ route('dashboard') }}" class="active">
                 <span data-feather="home" class="nav-icon"></span>
                 <span class="menu-text">Dashboard</span>
             </a>

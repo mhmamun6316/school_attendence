@@ -79,4 +79,18 @@ class User extends Authenticatable
 
         return count(array_diff($permissionNames, $rolePermissions)) === 0;
     }
+
+    public function hasPermission($permission)
+    {
+        $roles = $this->roles()->with('permissions')->get();
+
+        foreach ($roles as $role) {
+            if ($role->permissions->contains('name', $permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

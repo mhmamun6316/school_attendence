@@ -13,7 +13,9 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Admins List</h4>
                         <p class="float-right mb-2">
-                            <button id="add_user_btn" class="btn btn-primary btn-sm">Add Admin</button>
+                            @permission('admin.create')
+                                <button id="add_user_btn" class="btn btn-primary btn-sm">Add Admin</button>
+                            @endpermission
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">

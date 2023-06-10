@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Organization;
+use App\Models\Admin\Permission;
+use App\Models\Admin\Role;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +15,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.home');
+        $currentDate = Carbon::now()->format('M d, Y');
+        $roles = Role::count();
+        $permissions = Permission::count();
+        $admins = User::count();
+        $organizations = Organization::count();
+
+        return view('admin.home',compact('currentDate','roles','permissions','admins','organizations'));
     }
 
     public function logout(Request $request)
