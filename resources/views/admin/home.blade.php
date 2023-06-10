@@ -58,12 +58,12 @@
                                 <span class="fs-18">{{ $organizations }}</span>
                             </div>
                             <div class="gradient-color-name gradient5 py-35 px-20 color-white rounded-xl m-10 ">
-                                <span class="fs-18">Device</span>
+                                <span class="fs-18">Devices</span>
                                 <span class="fs-18">{{ $devices }}</span>
                             </div>
                             <div class="gradient-color-name gradient6 py-35 px-20 color-white rounded-xl m-10 ">
-                                <span class="fs-18">Student</span>
-                                <span class="fs-18">10</span>
+                                <span class="fs-18">Packages</span>
+                                <span class="fs-18">{{ $packages }}</span>
                             </div>
                         </div>
                         <!-- ends: .atbd-button-list" -->

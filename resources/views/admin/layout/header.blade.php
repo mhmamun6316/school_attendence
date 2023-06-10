@@ -52,31 +52,14 @@
                                     <img src="{{ asset('backend') }}/img/author-nav.jpg" alt="" class="rounded-circle">
                                 </div>
                                 <div>
-                                    <h6>Abdullah Bin Talha</h6>
-                                    <span>UI Designer</span>
+                                    <h6>{{ auth()->user()->name }}</h6>
                                 </div>
                             </div>
                             <div class="nav-author__options">
                                 <ul>
                                     <li>
                                         <a href="#">
-                                            <span data-feather="user"></span> Profile</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span data-feather="settings"></span> Settings</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span data-feather="key"></span> Billing</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span data-feather="users"></span> Activity</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span data-feather="bell"></span> Help</a>
+                                            <span data-feather="user"></span> Change Password</a>
                                     </li>
                                 </ul>
                                 <a class="nav-author__signout" href="{{ route('admin.logout') }}"

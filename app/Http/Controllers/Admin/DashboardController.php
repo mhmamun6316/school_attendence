@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Device;
 use App\Models\Admin\Organization;
+use App\Models\Admin\Package;
 use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
 use App\Models\User;
@@ -22,9 +23,10 @@ class DashboardController extends Controller
         $admins = User::count();
         $organizations = Organization::count();
         $devices = Device::count();
+        $packages = Package::count();
 
         return view('admin.home',compact([
-            'currentDate','roles','permissions','admins','organizations','devices']
+            'currentDate','roles','permissions','admins','organizations','devices','packages']
         ));
     }
 

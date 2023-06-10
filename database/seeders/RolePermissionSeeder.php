@@ -22,27 +22,6 @@ class RolePermissionSeeder extends Seeder
                 'group_name' => 'dashboard',
                 'permissions' => [
                     'dashboard.view',
-                    'dashboard.edit',
-                ]
-            ],
-            [
-                'group_name' => 'blog',
-                'permissions' => [
-                    'blog.create',
-                    'blog.view',
-                    'blog.edit',
-                    'blog.delete',
-                    'blog.approve',
-                ]
-            ],
-            [
-                'group_name' => 'admin',
-                'permissions' => [
-                    'admin.create',
-                    'admin.view',
-                    'admin.edit',
-                    'admin.delete',
-                    'admin.approve',
                 ]
             ],
             [
@@ -52,14 +31,42 @@ class RolePermissionSeeder extends Seeder
                     'role.view',
                     'role.edit',
                     'role.delete',
-                    'role.approve',
                 ]
             ],
             [
-                'group_name' => 'profile',
+                'group_name' => 'organization',
                 'permissions' => [
-                    'profile.view',
-                    'profile.edit',
+                    'organization.create',
+                    'organization.view',
+                    'organization.edit',
+                    'organization.delete',
+                ]
+            ],
+            [
+                'group_name' => 'admin',
+                'permissions' => [
+                    'admin.create',
+                    'admin.view',
+                    'admin.edit',
+                    'admin.delete',
+                ]
+            ],
+            [
+                'group_name' => 'device',
+                'permissions' => [
+                    'device.create',
+                    'device.view',
+                    'device.edit',
+                    'device.delete',
+                ]
+            ],
+            [
+                'group_name' => 'package',
+                'permissions' => [
+                    'package.create',
+                    'package.view',
+                    'package.edit',
+                    'package.delete',
                 ]
             ],
         ];
