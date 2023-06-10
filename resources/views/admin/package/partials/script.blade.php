@@ -20,8 +20,14 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                error: function (error) {
-
+                error: function (xhr) {
+                    let errorResponse = JSON.parse(xhr.responseText);
+                    let error = errorResponse.error;
+                    if(error){
+                        toastr.error(error);
+                    } else {
+                        toastr.error('Error fetching packages. Please try again.');
+                    }
                 }
             },
             columns: [
@@ -54,10 +60,14 @@
                     $('#add_package_modal').modal('hide');
                     toastr.success(response.success);
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     let errorResponse = JSON.parse(xhr.responseText);
                     let error = errorResponse.error;
-                    toastr.error(error);
+                    if(error){
+                        toastr.error(error);
+                    } else {
+                        toastr.error('Error storing package. Please try again.');
+                    }
                 }
             });
         });
@@ -139,11 +149,14 @@
                 toastr.success(response.success);
                 table.ajax.reload();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 let errorResponse = JSON.parse(xhr.responseText);
-                let errorMessage = errorResponse.error;
-
-                toastr.error(errorMessage);
+                let error = errorResponse.error;
+                if(error){
+                    toastr.error(error);
+                } else {
+                    toastr.error('Error deleting package. Please try again.');
+                }
             }
         });
     });

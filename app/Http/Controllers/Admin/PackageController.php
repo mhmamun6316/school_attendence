@@ -15,12 +15,22 @@ class PackageController extends Controller
 {
     public function index()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.create')){
+            abort(403);
+        }
+
         $categories = Category::all();
         return view('admin.package.index',compact('categories'));
     }
 
     public function packageList()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.view')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $packages = Package::latest()->get();
 
         return DataTables::of($packages)
@@ -33,11 +43,19 @@ class PackageController extends Controller
 
                 return $categories;
             })
-            ->addColumn('action', function($packages){
-                $actionBtn = '<div class="actions">
-                                    <a id="edit_btn" data-package-id="'.$packages->id.'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
-                                    <a id="delete_btn" data-package-id="'.$packages->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
-                                </div>';
+            ->addColumn('action', function($packages) use ($authUser){
+                $actionBtn = '<div class="actions">';
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('package.edit')) {
+                    $actionBtn .= '<a id="edit_btn" data-package-id="'.$packages->id.'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>';
+                }
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('package.delete')) {
+                    $actionBtn .= '<a id="delete_btn" data-package-id="'.$packages->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>';
+                }
+
+                $actionBtn .= '</div>';
+
                 return $actionBtn;
             })
             ->rawColumns(['action','categories'])
@@ -46,9 +64,11 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
-        //        if(!auth()->device()->can('create',Organization::class)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.create')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'price' => 'required|numeric',
@@ -82,6 +102,11 @@ class PackageController extends Controller
 
     public function edit($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $package = Package::with('categories')->findOrFail($id);
 
         if (!$package) {
@@ -93,6 +118,11 @@ class PackageController extends Controller
 
     public function update(Request $request, $id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'price' => 'required|numeric',
@@ -124,6 +154,11 @@ class PackageController extends Controller
 
     public function destroy($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.delete')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         try{
             $package = Package::findOrFail($id);
 

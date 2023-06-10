@@ -18,7 +18,9 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Packages List</h4>
                         <p class="float-right mb-2">
-                            <button id="add_package_btn" class="btn btn-primary btn-sm">Add Package</button>
+                            @permission('package.create')
+                                <button id="add_package_btn" class="btn btn-primary btn-sm">Add Package</button>
+                            @endpermission
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">

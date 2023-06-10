@@ -56,6 +56,8 @@ class UserController extends Controller
                 }
 
                 $actionBtn .= '</div>';
+
+                return $actionBtn;
             })
             ->rawColumns(['action','role'])
             ->make(true);
