@@ -15,12 +15,22 @@ class RoleController extends Controller
 {
     public function index()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.create')){
+            abort(403);
+        }
+
         $roles = Role::all();
         return view('admin.roles.index', compact('roles'));
     }
 
     public function rolesList(Request $request)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.view')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $roles = Role::latest()->get();
 
         return DataTables::of($roles)
@@ -39,6 +49,18 @@ class RoleController extends Controller
                                     <a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
                                 </div>';
                 return $actionBtn;
+
+                $actionBtn = '<div class="actions">';
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('device.edit')) {
+                    $actionBtn .= '<a id="edit_btn" href="'. route('admin.roles.edit',$roles->id) .'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>';
+                }
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('device.delete')) {
+                    $actionBtn .= '<a id="delete_btn" data-role-id="'.$roles->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>';
+                }
+
+                $actionBtn .= '</div>';
             })
             ->rawColumns(['action','permission'])
             ->make(true);
@@ -46,6 +68,11 @@ class RoleController extends Controller
 
     public function create()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.create')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $allPermissions  = Permission::all();
         $permissionGroups= Permission::permissionGroups();
 
@@ -55,9 +82,11 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        //        if(!auth()->user()->can('create',Organization::class)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.create')){
+            abort(403);
+        }
+
         $validator = Validator::make($request->all(),[
             'name' => 'required|max:100|unique:roles'
         ], [
@@ -88,6 +117,11 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.edit')){
+            abort(403);
+        }
+
         $role = Role::find($id);
         $allPermissions  = Permission::all();
         $permissionGroups= Permission::permissionGroups();
@@ -98,9 +132,11 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        //        if(!auth()->user()->can('create',Organization::class)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.edit')){
+            abort(403);
+        }
+
         $validator = Validator::make($request->all(),[
             'name' => 'required|max:100|unique:roles,name,' . $id
         ], [
@@ -134,6 +170,11 @@ class RoleController extends Controller
 
     public function destroy($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.delete')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         try{
             $role = Role::find($id);
             if (!is_null($role)){

@@ -13,7 +13,9 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Roles List</h4>
                         <p class="float-right mb-2">
-                            <a class="btn btn-sm btn-primary text-white" href="{{ route('admin.roles.create') }}">Create New Role</a>
+                            @permission('role.create')
+                                <a class="btn btn-sm btn-primary text-white" href="{{ route('admin.roles.create') }}">Create New Role</a>
+                            @endpermission
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">
@@ -74,8 +76,14 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    error: function (error) {
-
+                    error: function (xhr) {
+                        let errorResponse = JSON.parse(xhr.responseText);
+                        let error = errorResponse.error;
+                        if(error){
+                            toastr.error(error);
+                        } else {
+                            toastr.error('Error fetching roles. Please try again.');
+                        }
                     }
                 },
                 columns: [
@@ -107,11 +115,14 @@
                     toastr.success(response.success);
                     table.ajax.reload();
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     let errorResponse = JSON.parse(xhr.responseText);
-                    let errorMessage = errorResponse.error;
-
-                    toastr.error(errorMessage);
+                    let error = errorResponse.error;
+                    if(error){
+                        toastr.error(error);
+                    } else {
+                        toastr.error('Error deleting roles. Please try again.');
+                    }
                 }
             });
         });
