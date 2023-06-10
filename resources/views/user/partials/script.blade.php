@@ -23,10 +23,14 @@
                     $('#add_user_modal').modal('hide');
                     toastr.success(response.success);
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     let errorResponse = JSON.parse(xhr.responseText);
                     let error = errorResponse.error;
-                    toastr.error(error);
+                    if(error){
+                        toastr.error(error);
+                    } else {
+                        toastr.error('Error storing admin. Please try again.');
+                    }
                 }
             });
         });
@@ -55,8 +59,14 @@
                     $('.selected_organization').val(selectedOrganizationId);
                 });
             },
-            error: function(xhr) {
-                toastr.error('Error loading organization data. Please try again.');
+            error: function (xhr) {
+                let errorResponse = JSON.parse(xhr.responseText);
+                let error = errorResponse.error;
+                if(error){
+                    toastr.error(error);
+                } else {
+                    toastr.error('Error loading organization data. Please try again.');
+                }
             }
         });
     }
@@ -125,8 +135,14 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                error: function (error) {
-
+                error: function (xhr) {
+                    let errorResponse = JSON.parse(xhr.responseText);
+                    let error = errorResponse.error;
+                    if(error){
+                        toastr.error(error);
+                    } else {
+                        toastr.error('Error fetching admins. Please try again.');
+                    }
                 }
             },
             columns: [
@@ -164,7 +180,7 @@
                 $('#edit_user_modal').modal('show');
             },
             error: function(xhr) {
-                toastr.error('Error loading user data. Please try again.');
+                toastr.error('Error loading admin data. Please try again.');
             }
         });
     });
@@ -192,7 +208,7 @@
                 if(error){
                     toastr.error(error);
                 } else {
-                    toastr.error('Error updating user. Please try again.');
+                    toastr.error('Error updating admin. Please try again.');
                 }
             }
         });
@@ -218,11 +234,14 @@
                 toastr.success(response.success);
                 table.ajax.reload();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 let errorResponse = JSON.parse(xhr.responseText);
-                let errorMessage = errorResponse.error;
-
-                toastr.error(errorMessage);
+                let error = errorResponse.error;
+                if(error){
+                    toastr.error(error);
+                } else {
+                    toastr.error('Error deleting admin. Please try again.');
+                }
             }
         });
     });

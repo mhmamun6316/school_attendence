@@ -15,13 +15,23 @@ class UserController extends Controller
 {
     public function index()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.view')){
+            abort(403);
+        }
+
         $roles = Role::all();
         return view('user.index',compact('roles'));
     }
 
     public function usersList()
     {
-        $users = User::latest()->get();
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.view')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        $users = User::FilterByOrganization()->latest()->get();
 
         return DataTables::of($users)
             ->addIndexColumn()
@@ -34,12 +44,18 @@ class UserController extends Controller
 
                 return $role;
             })
-            ->addColumn('action', function($users){
-                $actionBtn = '<div class="actions">
-                                    <a id="edit_btn" data-user-id="'.$users->id.'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>
-                                    <a id="delete_btn" data-user-id="'.$users->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>
-                                </div>';
-                return $actionBtn;
+            ->addColumn('action', function($users) use ($authUser){
+                $actionBtn = '<div class="actions">';
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('admin.edit')) {
+                    $actionBtn .= '<a id="edit_btn" data-user-id="'.$users->id.'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>';
+                }
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('admin.delete')) {
+                    $actionBtn .= '<a id="delete_btn" data-user-id="'.$users->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>';
+                }
+
+                $actionBtn .= '</div>';
             })
             ->rawColumns(['action','role'])
             ->make(true);
@@ -47,9 +63,11 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        //        if(!auth()->user()->can('create',Organization::class)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.create')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email',
@@ -83,6 +101,11 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $user = User::find($id);
 
         if (!$user) {
@@ -96,6 +119,11 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email,' . $id,
@@ -128,6 +156,11 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('admin.delete')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         try{
             $user = User::find($id);
             if (!is_null($user)){
