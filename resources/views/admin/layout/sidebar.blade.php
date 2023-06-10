@@ -33,5 +33,11 @@
                 <span class="menu-text">Admins</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('admin.devices.index') }}">
+                <span data-feather="home" class="nav-icon"></span>
+                <span class="menu-text">Admins</span>
+            </a>
+        </li>
     </ul>
 </div>

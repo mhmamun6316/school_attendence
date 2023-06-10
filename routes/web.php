@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\DeviceController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,4 +37,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::get('/organizations/list',[OrganizationController::class,'organizationList'])->name('organizations.list');
     Route::resource('organizations',OrganizationController::class);
+
+    Route::resource('devices',DeviceController::class);
+    Route::post('/devices/list',[DeviceController::class,'deviceList'])->name('devices.list');
 });
