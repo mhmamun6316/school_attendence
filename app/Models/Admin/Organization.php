@@ -2,10 +2,10 @@
 
 namespace App\Models\Admin;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Organization extends Model
+class Organization extends BaseModel
 {
     use HasFactory;
 

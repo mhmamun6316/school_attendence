@@ -13,7 +13,9 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Devices List</h4>
                         <p class="float-right mb-2">
-                            <button id="add_device_btn" class="btn btn-primary btn-sm">Add Device</button>
+                            @permission('device.create')
+                                <button id="add_device_btn" class="btn btn-primary btn-sm">Add Device</button>
+                            @endpermission
                         </p>
                         <div class="clearfix"></div>
                         <div class="data-tables">

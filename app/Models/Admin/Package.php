@@ -2,10 +2,10 @@
 
 namespace App\Models\Admin;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Package extends Model
+class Package extends BaseModel
 {
     use HasFactory;
 
