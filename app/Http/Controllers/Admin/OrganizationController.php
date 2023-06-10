@@ -15,13 +15,22 @@ class OrganizationController extends Controller
 
     public function index()
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.create')){
+            abort(403);
+        }
+
         return view('admin.organization.index');
     }
 
     public function organizationList()
     {
-        $user = Auth::user();
-        $userOrganizationId = $user->organization_id;
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.view')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        $userOrganizationId = $authUser->organization_id;
 
         $organizations = Organization::where('id', $userOrganizationId)
             ->with('childrenRecursive')
@@ -32,9 +41,11 @@ class OrganizationController extends Controller
 
     public function store(Request $request)
     {
-//        if(!auth()->user()->can('create',Organization::class)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.create')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'address' => 'required|string',
@@ -64,13 +75,16 @@ class OrganizationController extends Controller
 
     public function update(Request $request, $id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $organization = Organization::find($id);
         if(!$organization){
             return response()->json(['error'=>"Organization Not Found"],404);
         }
-//        if(!auth()->user()->can('update',$organization)){
-//            return response()->json(['message','UnAuthorized '],403);
-//        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'address' => 'required|string',
@@ -98,13 +112,16 @@ class OrganizationController extends Controller
 
     public function destroy($id)
     {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.delete')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
         $organization = Organization::find($id);
         if(!$organization){
             return response()->json(['error'=>"Organization Not Found"],404);
         }
-//        if(!auth()->user()->can('delete',$organization)){
-//            return response()->json(['error','UnAuthorized '],403);
-//        }
+
         try{
             if($organization->parent_id === 0){
                 return response()->json(['error'=>"Can't Delete Parent Organization"],404);

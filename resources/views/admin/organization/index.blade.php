@@ -16,9 +16,15 @@
             <div class="col-12 mt-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-end">
-                        <button type="button" id="add_organization_btn" class="btn btn-primary btn-sm">Add</button>
-                        <button type="button" id="edit_organization_btn" class="btn btn-warning btn-sm">Edit</button>
-                        <button type="button" id="delete_organization_btn" class="btn btn-danger btn-sm">Delete</button>
+                        @permission('organization.create')
+                            <button type="button" id="add_organization_btn" class="btn btn-primary btn-sm">Add</button>
+                        @endpermission
+                        @permission('organization.edit')
+                            <button type="button" id="edit_organization_btn" class="btn btn-warning btn-sm">Edit</button>
+                        @endpermission
+                        @permission('organization.delete')
+                            <button type="button" id="delete_organization_btn" class="btn btn-danger btn-sm">Delete</button>
+                        @endpermission
                     </div>
                     <div class="card-body">
                         <div id="organization-tree"></div>
@@ -238,12 +244,15 @@
                                     $('#add_organization_modal').modal('hide');
                                     toastr.success(response.success)
                                 },
-                                error: function(xhr) {
+                                error: function (xhr) {
                                     let errorResponse = JSON.parse(xhr.responseText);
-                                    let errorMessage = errorResponse.error;
-
-                                    toastr.error(errorMessage);
-                                }
+                                    let error = errorResponse.error;
+                                    if(error){
+                                        toastr.error(error);
+                                    } else {
+                                        toastr.error('Error storing organization. Please try again.');
+                                    }
+                            }
                             });
                     });
                 } else {
@@ -284,11 +293,14 @@
                                 $('#edit_organization_modal').modal('hide');
                                 toastr.success(response.success)
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 let errorResponse = JSON.parse(xhr.responseText);
-                                let errorMessage = errorResponse.error;
-
-                                toastr.error(errorMessage);
+                                let error = errorResponse.error;
+                                if(error){
+                                    toastr.error(error);
+                                } else {
+                                    toastr.error('Error updating organization. Please try again.');
+                                }
                             }
                         });
                     });
@@ -318,11 +330,14 @@
                                 $('#delete_organization_btn').modal('hide');
                                 toastr.success(response.success)
                             },
-                            error: function(xhr) {
+                            error: function (xhr) {
                                 let errorResponse = JSON.parse(xhr.responseText);
-                                let errorMessage = errorResponse.error;
-
-                                toastr.error(errorMessage);
+                                let error = errorResponse.error;
+                                if(error){
+                                    toastr.error(error);
+                                } else {
+                                    toastr.error('Error deleting organization Please try again.');
+                                }
                             }
                         });
                     });
