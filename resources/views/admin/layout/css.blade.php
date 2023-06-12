@@ -80,4 +80,13 @@
         color: #fff;
         background-color: #20c997;
     }
+
+    .custom-badge2{
+        height: 20px;
+        padding: 5px 10px;
+        font-size: 12px;
+        border-radius: 15px;
+        color: #fff;
+        background-color: #116D6E;
+    }
 </style>

@@ -20,7 +20,7 @@ class CategorySeeder extends Seeder
             ['id' => 2, 'name' => 'mobile sms'],
             ['id' => 3, 'name' => 'whats app'],
             ['id' => 4, 'name' => 'telegram'],
-            ['id' => 5, 'name' => 'slack'],
+            ['id' => 5, 'name' => 'email'],
         ];
 
         foreach ($categories as $category) {

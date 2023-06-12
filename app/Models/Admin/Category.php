@@ -10,12 +10,12 @@ class Category extends BaseModel
     use HasFactory;
     protected $fillable = ['name'];
 
-    CONST PACKAGES = [
+    CONST CATEGORY = [
         'Messenger' => 1,
         'SMS' => 2,
         'WhatsApp' => 3,
         'Telegram' => 4,
-        'Slack' => 5
+        'Email' => 5
     ];
 
     public function packages()

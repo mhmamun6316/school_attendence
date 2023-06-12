@@ -19,4 +19,10 @@ class Student extends BaseModel
     {
         return $this->hasMany(StudentPackageLog::class);
     }
+
+    public function package()
+    {
+        return $this->belongsToMany(Package::class, 'student_package_logs')
+            ->wherePivot('status', 1);
+    }
 }
