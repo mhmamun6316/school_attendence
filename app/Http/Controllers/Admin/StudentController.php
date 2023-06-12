@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Package;
 use App\Models\Admin\Student;
+use App\Models\Admin\StudentPackageLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
 class StudentController extends Controller
@@ -16,7 +20,9 @@ class StudentController extends Controller
             abort(403);
         }
 
-        return view('admin.student.index');
+        $packages = Package::latest()->get();
+
+        return view('admin.student.index',compact('packages'));
     }
 
     public function studentList(Request $request)
@@ -33,6 +39,15 @@ class StudentController extends Controller
             ->editColumn('organization', function ($students){
                 return '<span class="custom-badge">' . $students->organization->name . '</span>';
             })
+            ->editColumn('package', function ($students){
+                $package = $students->package->first();
+                if (!$package){
+                    $package = "No Active Package";
+                }else{
+                    $package = $package->name;
+                }
+                return '<span class="badge badge-round badge-success badge-lg mr-1">'. $package .'</span>';
+            })
             ->addColumn('action', function($students) use ($authUser){
                 $actionBtn = '<div class="actions">';
 
@@ -48,57 +63,113 @@ class StudentController extends Controller
 
                 return $actionBtn;
             })
-            ->rawColumns(['action','organization'])
+            ->rawColumns(['action','organization','package'])
             ->make(true);
     }
 
     public function store(Request $request)
     {
-        //
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.create')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|max:255',
+            'avatar' => 'nullable|image|max:2048',
+            'phone' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:255',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_phone' => 'nullable|string|max:255',
+            'guardian_email' => 'nullable|email|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $firstError = $errors->first();
+
+            return back()->with(['error' => $firstError], 422);
+        }
+
+        // Upload the avatar image if provided
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            Log::info($avatarPath);
+        }
+
+        try{
+            // Create a new student
+            $student = Student::create([
+                'name' => $request->name,
+                'avatar' => $avatarPath,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'guardian_phone' => $request->guardian_phone,
+                'guardian_email' => $request->guardian_email,
+                'organization_id' => auth()->user()->organization_id,
+            ]);
+
+            // Log the student package assignment
+            $package = Package::findOrFail($request->package_id);
+            if ($package){
+                StudentPackageLog::create([
+                    'student_id' => $student->id,
+                    'package_id' => $package->id,
+                    'status' => true,
+                ]);
+            }
+
+            return response()->json(['success' => 'Student Added successfully'], 200);
+        }catch(\Exception $e){
+            Log::info("Student adding error:".$e->getLine());
+            return back()->with(['error'=>$e->getMessage()],500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        $student = Student::with('package')->findOrFail($id);
+
+        if (!$student) {
+            return response()->json(['error' => 'student not found'], 404);
+        }
+
+        return response()->json(['student' => $student], 200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        //
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('students.delete')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        try{
+            $student = Student::findOrFail($id);
+            $student->logs()->delete();
+
+            $student->delete();
+
+            return response()->json(['success' => 'Student Deleted successfully'], 200);
+
+        }catch(\Exception $e){
+            Log::debug("Error in Student delete:".$e->getMessage());
+            Log::debug("Error in Student delete:".$e->getLine());
+            return response()->json(['error'=>$e->getMessage()],500);
+        }
     }
 }

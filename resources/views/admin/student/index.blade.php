@@ -14,7 +14,7 @@
                         <h4 class="header-title float-left">Students List</h4>
                         <p class="float-right mb-2">
                             @permission('admin.create')
-                            <button id="add_user_btn" class="btn btn-primary btn-sm">Add Student</button>
+                            <button id="add_student_btn" class="btn btn-primary btn-sm">Add Student</button>
                             @endpermission
                         </p>
                         <div class="clearfix"></div>
@@ -40,47 +40,78 @@
             </div>
 
             {{--adding user modal--}}
-            <div class="modal-basic modal fade show" id="add_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-basic modal fade show" id="add_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
-                            <h6 class="modal-title">Add New Users</h6>
+                            <h6 class="modal-title">Add New Student</h6>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span data-feather="x"></span></button>
                         </div>
-                        <form id="user_form">
+                        <form id="student_form" enctype="multipart/form-data">
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input placeholder="enter a name" type="text" class="form-control" id="name" name="name" required>
+                                            <input type="text" name="name" id="name" class="form-control" required>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="avatar">Avatar</label>
+                                            <input type="file" name="avatar" id="avatar" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <input type="text" name="phone" id="phone" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input placeholder="enter email address" type="email" class="form-control" id="email" name="email" required>
+                                            <input type="email" name="email" id="email" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control" id="role" name="role_id" required>
-                                                <option selected value="">Please select a role</option>
-
+                                            <label for="address">Address</label>
+                                            <input type="text" name="address" id="address" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="guardian_name">Guardian Phone</label>
+                                            <input type="text" name="guardian_phone" id="guardian_phone" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="guardian_email">Guardian Email</label>
+                                            <input type="email" name="guardian_email" id="guardian_email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="package_id">Package</label>
+                                            <select name="package_id" id="package_id" class="form-control">
+                                                <option value="">Please select a package</option>
+                                                @foreach ($packages as $package)
+                                                    <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="organization">Organization</label>
-                                    <div class="jstree organization_tree"></div>
-                                    <input type="hidden" class="selected_organization" name="organization_id">
-                                </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" id="save_Organization_Btn" class="btn btn-primary btn-sm">Save changes</button>
+                                <button type="submit" id="save_student_Btn" class="btn btn-primary btn-sm">Save changes</button>
                                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
                             </div>
                         </form>
@@ -89,7 +120,7 @@
             </div>
 
             {{--editing user modal--}}
-            <div class="modal-basic modal fade show" id="edit_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-basic modal fade show" id="edit_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
@@ -99,34 +130,65 @@
                         </div>
                         <form id="edit_user_form" method="POST">
                             <div class="modal-body">
-                                <input type="hidden" name="user_id" id="user_id">
-                                <input type="hidden" class="selected_organization" name="organization_id">
+                                <input type="hidden" name="student_id" id="student_id">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input placeholder="enter a name" type="text" class="form-control" id="user_name" name="name" required>
+                                            <input type="text" name="name" id="student_name" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input placeholder="enter email address" type="email" class="form-control" id="user_email" name="email" required>
+                                            <label for="avatar">Avatar</label>
+                                            <input type="file" name="avatar" id="student_avatar" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="role">Role</label>
-                                            <select class="form-control" id="user_role" name="role_id" required>
-                                                <option selected value="">Please select a role</option>
-
-                                            </select>
+                                            <label for="phone">Phone</label>
+                                            <input type="text" name="phone" id="student_phone" class="form-control">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="organization_tree">Organization</label>
-                                    <div class="jstree organization_tree"></div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" id="student_email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <input type="text" name="address" id="student_address" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="guardian_name">Guardian Phone</label>
+                                            <input type="text" name="guardian_phone" id="student_guardian_phone" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="guardian_email">Guardian Email</label>
+                                            <input type="email" name="guardian_email" id="student_guardian_email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="package_id">Package</label>
+                                            <select name="package_id" id="student_package_id" class="form-control">
+                                                <option value="">Please select a package</option>
+                                                @foreach ($packages as $package)
+                                                    <option value="{{ $package->id }}">{{ $package->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -138,8 +200,8 @@
                 </div>
             </div>
 
-            {{--confirm modal--}}
-            <div class="modal-info-delete modal fade show" id="delete_user_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            {{--confirm modal--}}`
+            <div class="modal-info-delete modal fade show" id="delete_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-info" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -148,7 +210,7 @@
                                     <span data-feather="info"></span>
                                 </div>
                                 <div class="modal-info-text">
-                                    <h6>Do you Want to delete that user?</h6>
+                                    <h6>Do you Want to delete that student?</h6>
                                 </div>
                             </div>
                         </div>

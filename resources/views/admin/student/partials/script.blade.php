@@ -30,29 +30,29 @@
                 {data: 'email', name: 'email'},
                 {data: 'phone', name: 'phone'},
                 {data: 'organization', name: 'organization'},
-                {data: 'organization', name: 'organization'},
+                {data: 'package', name: 'package'},
                 {data: 'action', name: 'action'},
             ]
         });
 
-        $('#add_user_btn').on('click', function() {
-            $('#add_user_modal').modal('show');
+        $('#add_student_btn').on('click', function() {
+            $('#add_student_modal').modal('show');
         });
 
-        $('#user_form').on('submit', function(e) {
+        $('#student_form').on('submit', function(e) {
             e.preventDefault();
 
             let formData = $(this).serialize();
             formData += '&_token=' + $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
-                url: "{{ route('admin.users.store') }}",
+                url: "{{ route('admin.students.store') }}",
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
                     table.ajax.reload();
-                    $('#add_user_modal').modal('hide');
+                    $('#add_student_modal').modal('hide');
                     toastr.success(response.success);
                 },
                 error: function (xhr) {
@@ -61,7 +61,7 @@
                     if(error){
                         toastr.error(error);
                     } else {
-                        toastr.error('Error storing admin. Please try again.');
+                        toastr.error('Error storing student. Please try again.');
                     }
                 }
             });
@@ -70,48 +70,47 @@
 
     $(document).on('click', '#edit_btn', function(e) {
         e.preventDefault();
-
-        let userId = $(this).data('user-id');
+        let studentId = $(this).data('student-id');
 
         $.ajax({
-            url: "{{ route('admin.users.edit',':id') }}".replace(':id',userId),
+            url: "{{ route('admin.students.edit',':id') }}".replace(':id',studentId),
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                let user = response.user;
-                $('#edit_user_modal #user_id').val(user.id);
-                $('#edit_user_modal #user_name').val(user.name);
-                $('#edit_user_modal #user_email').val(user.email);
-                $('#edit_user_modal #user_role').val(user.role_id);
+                console.log(response)
+                let student = response.student;
+                $('#edit_student_modal #student_id').val(student.id);
+                $('#edit_student_modal #student_name').val(student.name);
+                $('#edit_student_modal #student_phone').val(student.phone);
+                $('#edit_student_modal #student_email').val(student.email);
+                $('#edit_student_modal #student_address').val(student.address);
+                $('#edit_student_modal #student_guardian_phone').val(student.guardian_phone);
+                $('#edit_student_modal #student_guardian_email').val(student.guardian_email);
+                $('#edit_student_modal #student_package_id').val(student.package[0].id);
 
-                let organizationTree = $('#edit_user_modal .organization_tree');
-                organizationTree.jstree('deselect_all');
-                organizationTree.jstree('select_node', user.organization_id);
-
-                // Open the modal
-                $('#edit_user_modal').modal('show');
+                $('#edit_student_modal').modal('show');
             },
             error: function(xhr) {
-                toastr.error('Error loading admin data. Please try again.');
+                toastr.error('Error loading student data. Please try again.');
             }
         });
     });
 
-    $(document).on("submit",'#edit_user_form',function (e){
+    $(document).on("submit",'#edit_student_form',function (e){
         e.preventDefault();
-        let userId = $('#user_id').val();
+        let studentId = $('#student_id').val();
         let formData = $(this).serialize();
 
         formData += '&_token=' + $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
-            url: "{{ route('admin.users.update',':id') }}".replace(':id',userId),
+            url: "{{ route('admin.students.update',':id') }}".replace(':id',studentId),
             type: 'PUT',
             data: formData,
             dataType: 'json',
             success: function(response) {
                 table.ajax.reload();
-                $('#edit_user_modal').modal('hide');
+                $('#edit_student_modal').modal('hide');
                 toastr.success(response.success);
             },
             error: function(xhr) {
@@ -127,16 +126,16 @@
     });
 
     $(document).on("click",'#delete_btn',function (e){
-        let userId = $(this).data('user-id');
-        $('#confirm_delete').data('user-id', userId);
-        $('#delete_user_modal').modal('show');
+        let studentId = $(this).data('student-id');
+        $('#confirm_delete').data('student-id', studentId);
+        $('#delete_student_modal').modal('show');
     })
 
     $('#confirm_delete').on('click', function() {
-        let userId = $(this).data('user-id');
+        let studentId = $(this).data('student-id');
 
         $.ajax({
-            url: "{{ route('admin.users.destroy', ':id') }}".replace(':id', userId),
+            url: "{{ route('admin.students.destroy', ':id') }}".replace(':id', studentId),
             type: "POST",
             data: {
                 _method: "DELETE",
