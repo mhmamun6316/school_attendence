@@ -86,7 +86,9 @@
                 $('#edit_student_modal #student_address').val(student.address);
                 $('#edit_student_modal #student_guardian_phone').val(student.guardian_phone);
                 $('#edit_student_modal #student_guardian_email').val(student.guardian_email);
-                $('#edit_student_modal #student_package_id').val(student.package[0].id);
+                if (student.active_package.length > 0){
+                    $('#edit_student_modal #student_package_id').val(student.active_package[0].id);
+                }
 
                 $('#edit_student_modal').modal('show');
             },

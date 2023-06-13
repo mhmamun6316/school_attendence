@@ -13,15 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('student_package_logs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('student_package', function (Blueprint $table) {
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('package_id');
-            $table->boolean('status')->default(false);
+            $table->unsignedBigInteger('history_id');
+            $table->boolean('active_status')->default(false);
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
+
+            $table->unique(['student_id', 'package_id', 'history_id']);
         });
     }
 
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_package_logs');
+        Schema::dropIfExists('student_package');
     }
 };

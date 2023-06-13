@@ -128,7 +128,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span data-feather="x"></span></button>
                         </div>
-                        <form id="edit_user_form" method="POST">
+                        <form id="edit_student_form" method="POST">
                             <div class="modal-body">
                                 <input type="hidden" name="student_id" id="student_id">
                                 <div class="row">

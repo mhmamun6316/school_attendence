@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Package;
 use App\Models\Admin\Student;
-use App\Models\Admin\StudentPackageLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +12,13 @@ use Yajra\DataTables\DataTables;
 
 class StudentController extends Controller
 {
+    protected $formattedDate;
+
+    public function __construct()
+    {
+        $this->formattedDate = now()->format('Y-m-d H:i');
+    }
+
     public function index()
     {
         $authUser = auth()->user();
@@ -40,7 +46,7 @@ class StudentController extends Controller
                 return '<span class="custom-badge">' . $students->organization->name . '</span>';
             })
             ->editColumn('package', function ($students){
-                $package = $students->package->first();
+                $package = $students->activePackage->first();
                 if (!$package){
                     $package = "No Active Package";
                 }else{
@@ -112,15 +118,14 @@ class StudentController extends Controller
                 'organization_id' => auth()->user()->organization_id,
             ]);
 
-            // Log the student package assignment
+            // Assigning a Package to a Student
             $package = Package::findOrFail($request->package_id);
-            if ($package){
-                StudentPackageLog::create([
-                    'student_id' => $student->id,
-                    'package_id' => $package->id,
-                    'status' => true,
-                ]);
-            }
+            $student->packages()->sync([$package->id => [
+                'history_id' =>  $this->formattedDate,
+                'start_date' => now(),
+                'end_date' => null,
+                'active_status' => true,
+            ]]);
 
             return response()->json(['success' => 'Student Added successfully'], 200);
         }catch(\Exception $e){
@@ -136,7 +141,7 @@ class StudentController extends Controller
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 
-        $student = Student::with('package')->findOrFail($id);
+        $student = Student::with('activePackage')->findOrFail($id);
 
         if (!$student) {
             return response()->json(['error' => 'student not found'], 404);
@@ -147,9 +152,84 @@ class StudentController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
-    }
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.edit')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
 
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|max:255',
+            'avatar' => 'nullable|image|max:2048',
+            'phone' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string|max:255',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_phone' => 'nullable|string|max:255',
+            'guardian_email' => 'nullable|email|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            $firstError = $errors->first();
+
+            return back()->with(['error' => $firstError], 422);
+        }
+
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        try{
+            $newPackageId = $request->package_id;
+            $student = Student::findOrFail($id);
+            $currentPackage = $student->activePackage->first();
+
+            if ($currentPackage) {
+                if ($currentPackage->id != $newPackageId) {
+                    // Deactivate the current package
+                    $currentPackage->pivot->update([
+                        'active_status' => false,
+                        'end_date' => now(),
+                    ]);
+
+                    // Assign the new package
+                    if ($newPackageId){
+                        $student->packages()->attach($newPackageId, [
+                            'history_id' => time(),
+                            'start_date' =>  $this->formattedDate,
+                            'end_date' => null,
+                            'active_status' => true,
+                        ]);
+                    }
+                }
+            }else if (isset($newPackageId)){
+                // Assign the new package
+                $student->packages()->attach($newPackageId, [
+                    'history_id' => time(),
+                    'start_date' =>  $this->formattedDate,
+                    'end_date' => null,
+                    'active_status' => true,
+                ]);
+            }
+
+            $student->update([
+                'name' => $request->name,
+                'avatar' => $avatarPath,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'address' => $request->address,
+                'guardian_phone' => $request->guardian_phone,
+                'guardian_email' => $request->guardian_email,
+                'organization_id' => auth()->user()->organization_id,
+            ]);
+
+            return response()->json(['success' => 'Student Updated successfully'], 200);
+        }catch(\Exception $e){
+            Log::info("Student updating error:".$e->getLine());
+            return response()->json(['error'=>$e->getMessage()],500);
+        }
+    }
 
     public function destroy($id)
     {
@@ -160,12 +240,14 @@ class StudentController extends Controller
 
         try{
             $student = Student::findOrFail($id);
-            $student->logs()->delete();
 
+            // Update the status of the student's records to false
+            $student->packages()->update([
+                'active_status' => false,
+            ]);
             $student->delete();
 
             return response()->json(['success' => 'Student Deleted successfully'], 200);
-
         }catch(\Exception $e){
             Log::debug("Error in Student delete:".$e->getMessage());
             Log::debug("Error in Student delete:".$e->getLine());

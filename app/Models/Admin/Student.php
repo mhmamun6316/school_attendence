@@ -15,19 +15,19 @@ class Student extends BaseModel
         return $this->belongsTo(Organization::class);
     }
 
-    public function packageLogs()
+    //for all packages for logs
+    public function packages()
     {
-        return $this->hasMany(StudentPackageLog::class);
+        return $this->belongsToMany(Package::class, 'student_package')
+            ->withPivot('start_date', 'end_date', 'active_status')
+            ->withTimestamps();
     }
 
-    public function package()
+    //for the latest active package of a student. use first() from the relationship
+    public function activePackage()
     {
-        return $this->belongsToMany(Package::class, 'student_package_logs')
-            ->wherePivot('status', 1);
-    }
-
-    public function logs()
-    {
-        return $this->hasMany(StudentPackageLog::class, 'student_id');
+        return $this->belongsToMany(Package::class, 'student_package')
+            ->wherePivot('active_status', true)
+            ->withPivot(['active_status', 'start_date', 'end_date']);
     }
 }

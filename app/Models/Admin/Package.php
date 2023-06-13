@@ -15,4 +15,11 @@ class Package extends BaseModel
     {
         return $this->belongsToMany(Category::class);
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_package')
+            ->withPivot('start_date', 'end_date', 'active_status')
+            ->withTimestamps();
+    }
 }
