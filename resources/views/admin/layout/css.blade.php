@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend') }}/img/favicon.png">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.11/themes/default/style.min.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 <style>
     .sidebar .menu-text {
@@ -88,5 +89,10 @@
         border-radius: 15px;
         color: #fff;
         background-color: #116D6E;
+    }
+
+    .btn i, .btn span{
+        margin-right: 0px;
+        padding: 8px 0px;
     }
 </style>

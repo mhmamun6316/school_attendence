@@ -58,11 +58,19 @@ class StudentController extends Controller
                 $actionBtn = '<div class="actions">';
 
                 if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.edit')) {
-                    $actionBtn .= '<a id="edit_btn" data-student-id="'.$students->id.'" class="btn btn-warning btn-xs btn-shadow-warning">Edit</a>';
+                    $actionBtn .= '<a id="edit_btn" data-student-id="'.$students->id.'" class="btn btn-warning btn-xs btn-shadow-warning"><i class="fa-solid fa-pen-to-square"></i></a>';
                 }
 
                 if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.delete')) {
-                    $actionBtn .= '<a id="delete_btn" data-student-id="'.$students->id.'" class="btn btn-danger btn-xs btn-shadow-danger">Delete</a>';
+                    $actionBtn .= '<a id="delete_btn" data-student-id="'.$students->id.'" class="btn btn-danger btn-xs btn-shadow-danger"><i class="fa-solid fa-trash-can"></i></a>';
+                }
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.log')) {
+                    $actionBtn .= '<a id="log_btn" data-student-id="'.$students->id.'" class="btn btn-secondary btn-xs btn-shadow-secondary" title="Package history"><i class="fa-solid fa-file"></i></a>';
+                }
+
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.package_deactive')) {
+                    $actionBtn .= '<a id="deactive_btn" data-student-id="'.$students->id.'" class="btn btn-success btn-xs btn-shadow-success" title="De-active package"><i class="fa-solid fa-power-off"></i></a>';
                 }
 
                 $actionBtn .= '</div>';
@@ -71,6 +79,45 @@ class StudentController extends Controller
             })
             ->rawColumns(['action','organization','package'])
             ->make(true);
+    }
+
+    public function studentLog($id)
+    {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.log')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        $student = Student::findOrFail($id);
+
+        $logData = $student->packages()->withPivot('start_date', 'end_date')->get();
+        return view('admin.student.log', ['logData' => $logData]);
+    }
+
+    public function studentDeactive($id)
+    {
+        $authUser = auth()->user();
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.deactive')){
+            return response()->json(['error' => "you are not authorized for this page"], 403);
+        }
+
+        try{
+            $student = Student::findOrFail($id);
+            $currentPackage = $student->activePackage->first();
+            if (!$currentPackage){
+                return response()->json(['error' => "Studen't dont have any active package"],500);
+            }
+
+            $currentPackage->pivot->update([
+                'active_status' => false,
+                'end_date' => now(),
+            ]);
+
+            return response()->json(['success' => 'Student deactivated successfully'], 200);
+        }catch(\Exception $e){
+            Log::info("Student deactivated error:".$e->getLine());
+            return response()->json(['error'=>$e->getMessage()],500);
+        }
     }
 
     public function store(Request $request)

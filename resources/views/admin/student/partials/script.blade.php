@@ -77,7 +77,6 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                console.log(response)
                 let student = response.student;
                 $('#edit_student_modal #student_id').val(student.id);
                 $('#edit_student_modal #student_name').val(student.name);
@@ -154,6 +153,55 @@
                     toastr.error(error);
                 } else {
                     toastr.error('Error deleting admin. Please try again.');
+                }
+            }
+        });
+    });
+
+    $(document).on("click",'#log_btn',function (){
+        let studentId = $(this).data('student-id');
+
+        $.ajax({
+            url: "{{ route('admin.students.log', ':id') }}".replace(':id', studentId),
+            method: 'GET',
+            success: function(response) {
+                $(".packageLog").empty();
+                $(".packageLog").append(response);
+                $('#student_history_modal').show();
+            },
+            error: function (xhr) {
+                let errorResponse = JSON.parse(xhr.responseText);
+                let error = errorResponse.error;
+                if(error){
+                    toastr.error(error);
+                } else {
+                    toastr.error('Error getting student history. Please try again.');
+                }
+            }
+        });
+    });
+
+    $(document).on("click",'.close_btn',function (){
+        $('#student_history_modal').hide();
+    });
+
+    $(document).on("click",'#deactive_btn',function (){
+        let studentId = $(this).data('student-id');
+
+        $.ajax({
+            url: "{{ route('admin.students.deactive', ':id') }}".replace(':id', studentId),
+            method: 'GET',
+            success: function (response) {
+                toastr.success(response.success);
+                table.ajax.reload();
+            },
+            error: function (xhr) {
+                let errorResponse = JSON.parse(xhr.responseText);
+                let error = errorResponse.error;
+                if(error){
+                    toastr.error(error);
+                } else {
+                    toastr.error('Error deactive student. Please try again.');
                 }
             }
         });

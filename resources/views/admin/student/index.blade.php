@@ -221,6 +221,23 @@
                     </div>
                 </div>
             </div>
+
+            {{--for history modal--}}
+            <div class="modal-basic modal fade show" id="student_history_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content modal-bg-white ">
+                        <div class="modal-header">
+                            <h6 class="modal-title">Student Package History</h6>
+                        </div>
+                        <div class="modal-body packageLog">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="close_btn btn btn-sm btn-secondary" data-dismiss="modal">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
