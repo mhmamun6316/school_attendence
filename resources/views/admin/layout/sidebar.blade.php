@@ -72,5 +72,14 @@
             </a>
         </li>
         @endpermission
+
+        @permission('package.view')
+{{--        <li>--}}
+{{--            <a href="{{ route('admin.attendences.index') }}">--}}
+{{--                <span data-feather="home" class="nav-icon"></span>--}}
+{{--                <span class="menu-text">Attendences</span>--}}
+{{--            </a>--}}
+{{--        </li>--}}
+        @endpermission
     </ul>
 </div>
