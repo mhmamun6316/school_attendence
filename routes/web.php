@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\AttendenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,4 +51,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('/students/list',[StudentController::class,'studentList'])->name('students.list');
     Route::get('/students/log/{id}',[StudentController::class,'studentLog'])->name('students.log');
     Route::get('/students/deactive/{id}',[StudentController::class,'studentDeactive'])->name('students.deactive');
+
+    Route::get('attendances',[AttendenceController::class,'attendance'])->name('attendances');
+    Route::post('attendances/list',[AttendenceController::class,'attendanceList'])->name('attendances.list');
 });
