@@ -21,6 +21,8 @@ class AttendenceController extends Controller
 
     public function getScanData(Request $request)
     {
+//        $this->sendFacebookMessage('100009107791391', 'Hello, this is your message!');
+
         $device_id     = $request->device_number;
         $student_id = $request->student_id;
         $timestamp     = $request->timestamp;
@@ -52,8 +54,6 @@ class AttendenceController extends Controller
 
     public function attendance()
     {
-        $this->sendFacebookMessage('100009107791391', 'Hello, this is your message!');
-
         $authUser = auth()->user();
         if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.create')){
             abort(403);
