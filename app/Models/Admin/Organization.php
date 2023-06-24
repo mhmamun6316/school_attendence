@@ -16,6 +16,11 @@ class Organization extends BaseModel
         return $this->hasMany(Organization::class, 'parent_id');
     }
 
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'organization_id');
+    }
+
     public function childrenRecursive()
     {
         return $this->children()->with('childrenRecursive');

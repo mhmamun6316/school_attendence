@@ -167,6 +167,7 @@ class StudentController extends Controller
 
             // Assigning a Package to a Student
             $package = Package::findOrFail($request->package_id);
+
             $student->packages()->sync([$package->id => [
                 'history_id' =>  $this->formattedDate,
                 'start_date' => now(),
