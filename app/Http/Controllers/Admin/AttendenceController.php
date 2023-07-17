@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AttendanceMail;
 use App\Models\Admin\Attendence;
 use App\Models\Admin\Device;
 use App\Models\Admin\Organization;
 use App\Models\Admin\Student;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\DataTables;
 
 class AttendenceController extends Controller
@@ -22,6 +24,8 @@ class AttendenceController extends Controller
     public function getScanData(Request $request)
     {
 //        $this->sendFacebookMessage('100009107791391', 'Hello, this is your message!');
+        Mail::to('mhmamun29404@gmail.com')
+                ->send(new AttendanceMail());
 
         $device_id     = $request->device_number;
         $student_id = $request->student_id;
@@ -43,7 +47,7 @@ class AttendenceController extends Controller
         }
 
         Attendence::create([
-            'device_id' => $device_id,
+            'device_id' => $device->id,
             'student_id' => $student_id,
             'organization_id' => $device->organization_id,
             'arrived_time' => $timestamp
