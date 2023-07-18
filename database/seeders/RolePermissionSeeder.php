@@ -69,6 +69,30 @@ class RolePermissionSeeder extends Seeder
                     'package.delete',
                 ]
             ],
+            [
+                'group_name' => 'student',
+                'permissions' => [
+                    'student.create',
+                    'student.view',
+                    'student.edit',
+                    'student.delete',
+                    'student.history',
+                    'student.deactivate',
+                ]
+            ],
+            [
+                'group_name' => 'attendance',
+                'permissions' => [
+                    'attendance.view',
+                    'attendance.filter',
+                ]
+            ],
+            [
+                'group_name' => 'bill',
+                'permissions' => [
+                    'bill.view',
+                ]
+            ],
         ];
 
         $roleSuperAdmin = Role::create(['name' => 'superadmin']);

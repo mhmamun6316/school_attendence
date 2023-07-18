@@ -24,9 +24,6 @@ class AttendenceController extends Controller
     public function getScanData(Request $request)
     {
 //        $this->sendFacebookMessage('100009107791391', 'Hello, this is your message!');
-        Mail::to('mhmamun29404@gmail.com')
-                ->send(new AttendanceMail());
-
         $device_id     = $request->device_number;
         $student_id = $request->student_id;
         $timestamp     = $request->timestamp;
@@ -44,6 +41,14 @@ class AttendenceController extends Controller
         $device = Device::where('device_number', $device_id)->first();
         if(!$device){
             return response()->json(['error' => 'Device is not found!!'], 404);
+        }
+
+        $student = Student::findOrFail($student_id);
+
+        if ($student->guardian_email)
+        {
+            Mail::to($student->guardian_email)
+                ->send(new AttendanceMail());
         }
 
         Attendence::create([

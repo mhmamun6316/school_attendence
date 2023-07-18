@@ -30,7 +30,6 @@
                                 <a class="wh-36 bg-primary text-white radius-md mr-10 content-center" href="index.html">a</a>
                                 <span class="text-dark">admin</span>
                             </div>
-                            <h1>School Attendence Management System</h1>
                         </div><!-- End: .signUP-admin-left__content  -->
                         <div class="signUP-admin-left__img">
                             <img class="img-fluid svg" src="{{ asset('backend') }}/img/svg/signupIllustration.svg" alt="img" />
@@ -60,7 +59,7 @@
                                                         <label for="password-field">password</label>
                                                         <div class="position-relative">
                                                             <input id="password-field" type="password" class="form-control" name="password" value="secret">
-                                                            <div class="fa fa-fw fa-eye-slash text-light fs-16 field-icon toggle-password2"></div>
+                                                            <div class="fa fa-fw fa-eye-slash text-light fs-16 field-icon toggle-password2" id="toggle-password"></div>
                                                         </div>
                                                     </div>
                                                     <div class="button-group d-flex pt-1 justify-content-md-start justify-content-center">
@@ -94,5 +93,22 @@
 
 <script src="{{ asset('backend') }}/js/plugins.min.js"></script>
 <script src="{{ asset('backend') }}/js/script.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#toggle-password").click(function() {
+            let passwordField = $("#password-field");
+            let icon = $(this);
+
+            if (passwordField.attr("type") === "password") {
+                passwordField.attr("type", "text");
+                icon.removeClass("fa-eye-slash").addClass("fa-eye");
+            } else {
+                passwordField.attr("type", "password");
+                icon.removeClass("fa-eye").addClass("fa-eye-slash");
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

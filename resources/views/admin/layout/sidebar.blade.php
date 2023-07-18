@@ -64,7 +64,7 @@
         </li>
         @endpermission
 
-        @permission('package.view')
+        @permission('student.view')
         <li>
             <a href="{{ route('admin.students.index') }}">
                 <span data-feather="home" class="nav-icon"></span>
@@ -73,7 +73,7 @@
         </li>
         @endpermission
 
-        @permission('package.view')
+        @permission('attendance.view')
         <li>
             <a href="{{ route('admin.attendances') }}">
                 <span data-feather="home" class="nav-icon"></span>
@@ -82,7 +82,7 @@
         </li>
         @endpermission
 
-        @permission('package.view')
+        @permission('bill.view')
         <li>
             <a href="{{ route('admin.bills') }}">
                 <span data-feather="home" class="nav-icon"></span>
