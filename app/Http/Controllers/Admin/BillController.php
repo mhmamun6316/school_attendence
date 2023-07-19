@@ -23,6 +23,28 @@ class BillController extends Controller
         return view('admin.bill.index');
     }
 
+    private function getNestedChildOrganizations($parentOrganizationId, $includeParent = false)
+    {
+        $result = collect();
+
+        if ($includeParent) {
+            $parentOrganization = Organization::find($parentOrganizationId);
+            if ($parentOrganization) {
+                $result->push($parentOrganization);
+            }
+        }
+
+        $childOrganizations = Organization::where('parent_id', $parentOrganizationId)->get();
+
+        foreach ($childOrganizations as $childOrganization) {
+            $result->push($childOrganization);
+            $nestedChildOrganizations = $this->getNestedChildOrganizations($childOrganization->id);
+            $result = $result->merge($nestedChildOrganizations);
+        }
+
+        return $result;
+    }
+
     public function billList(Request $request)
     {
         $authUser = auth()->user();
@@ -30,7 +52,13 @@ class BillController extends Controller
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 
-        $organizations = Organization::all();
+        if ($authUser->isSuperAdmin()) {
+            $organizations = Organization::all();
+        } else {
+            $userOrganizationId = $authUser->organization_id;
+
+            $organizations = $this->getNestedChildOrganizations($userOrganizationId, true);
+        }
 
         foreach ($organizations as $organization) {
             $students = $organization->students;

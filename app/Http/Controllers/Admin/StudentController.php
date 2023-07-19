@@ -166,18 +166,21 @@ class StudentController extends Controller
             ]);
 
             // Assigning a Package to a Student
-            $package = Package::findOrFail($request->package_id);
+            if ($request->package_id){
+                $package = Package::findOrFail($request->package_id);
 
-            $student->packages()->sync([$package->id => [
-                'history_id' =>  $this->formattedDate,
-                'start_date' => now(),
-                'end_date' => null,
-                'active_status' => true,
-            ]]);
+                $student->packages()->sync([$package->id => [
+                    'history_id' =>  $this->formattedDate,
+                    'start_date' => now(),
+                    'end_date' => null,
+                    'active_status' => true,
+                ]]);
+            }
 
             return response()->json(['success' => 'Student Added successfully'], 200);
         }catch(\Exception $e){
             Log::info("Student adding error:".$e->getLine());
+            Log::info("Student adding error:".$e->getMessage());
             return back()->with(['error'=>$e->getMessage()],500);
         }
     }
@@ -282,7 +285,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('students.delete')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.delete')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 

@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <h4 class="header-title float-left">Students List</h4>
                         <p class="float-right mb-2">
-                            @permission('admin.create')
+                            @permission('student.create')
                             <button id="add_student_btn" class="btn btn-primary btn-sm">Add Student</button>
                             @endpermission
                         </p>
