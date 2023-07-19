@@ -16,7 +16,7 @@ class PackageController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('package.view')){
             abort(403);
         }
 

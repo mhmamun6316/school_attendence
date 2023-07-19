@@ -16,7 +16,7 @@ class RoleController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('role.view')){
             abort(403);
         }
 

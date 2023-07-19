@@ -70,6 +70,8 @@
                         <!-- ends: .atbd-button-list" -->
                     </div>
                 </div>
+                @else
+                    <h2>You don't have permission to view the statistics data</h2>
                 @endpermission
             </div>
         </div>

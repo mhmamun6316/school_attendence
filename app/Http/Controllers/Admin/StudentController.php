@@ -22,7 +22,7 @@ class StudentController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.view')){
             abort(403);
         }
 
@@ -65,11 +65,11 @@ class StudentController extends Controller
                     $actionBtn .= '<a id="delete_btn" data-student-id="'.$students->id.'" class="btn btn-danger btn-xs btn-shadow-danger"><i class="fa-solid fa-trash-can"></i></a>';
                 }
 
-                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.log')) {
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.history')) {
                     $actionBtn .= '<a id="log_btn" data-student-id="'.$students->id.'" class="btn btn-secondary btn-xs btn-shadow-secondary" title="Package history"><i class="fa-solid fa-file"></i></a>';
                 }
 
-                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.package_deactive')) {
+                if ($authUser->isSuperAdmin() || $authUser->hasPermission('student.deactivate')) {
                     $actionBtn .= '<a id="deactive_btn" data-student-id="'.$students->id.'" class="btn btn-success btn-xs btn-shadow-success" title="De-active package"><i class="fa-solid fa-power-off"></i></a>';
                 }
 
@@ -84,7 +84,7 @@ class StudentController extends Controller
     public function studentLog($id)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.log')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.history')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 
@@ -97,7 +97,7 @@ class StudentController extends Controller
     public function studentDeactive($id)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.deactive')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.deactivate')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 

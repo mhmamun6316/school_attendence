@@ -64,7 +64,7 @@ class AttendenceController extends Controller
     public function attendance()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('attendance.view')){
             abort(403);
         }
 
@@ -83,7 +83,7 @@ class AttendenceController extends Controller
     public function attendanceList(Request $request)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.view')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('attendance.view')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 

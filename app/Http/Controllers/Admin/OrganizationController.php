@@ -16,7 +16,7 @@ class OrganizationController extends Controller
     public function index()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('organization.view')){
             abort(403);
         }
 

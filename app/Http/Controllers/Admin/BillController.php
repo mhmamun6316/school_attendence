@@ -16,7 +16,7 @@ class BillController extends Controller
     public function bill()
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.create')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('bill.view')){
             abort(403);
         }
 
@@ -26,7 +26,7 @@ class BillController extends Controller
     public function billList(Request $request)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('student.view')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('bill.view')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 

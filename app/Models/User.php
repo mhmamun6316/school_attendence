@@ -46,6 +46,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    const ROLES = [
+        'super_admin' => 6
+    ];
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -53,7 +57,7 @@ class User extends Authenticatable
 
     public function isSuperAdmin()
     {
-        return $this->roles()->where('id', 1)->exists();
+        return $this->roles()->where('id', User::ROLES['super_admin'])->exists();
     }
 
     public function organization()

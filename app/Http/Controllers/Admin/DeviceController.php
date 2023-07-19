@@ -110,7 +110,7 @@ class DeviceController extends Controller
     public function update(Request $request, $id)
     {
         $authUser = auth()->user();
-        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('device.delete')){
+        if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('device.edit')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
         $validator = Validator::make($request->all(), [
