@@ -95,4 +95,8 @@
         margin-right: 0px;
         padding: 8px 0px;
     }
+
+    .required{
+        color: red;
+    }
 </style>

@@ -7,6 +7,7 @@
             processing: true,
             serverSide: true,
             responsive: true,
+            scrollX:true,
             ajax: {
                 url: "{{ route('admin.students.list') }}",
                 type: "POST",
@@ -27,8 +28,8 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
+                {data: 'student_id', name: 'student_id'},
                 {data: 'email', name: 'email'},
-                {data: 'phone', name: 'phone'},
                 {data: 'organization', name: 'organization'},
                 {data: 'package', name: 'package'},
                 {data: 'action', name: 'action'},
@@ -51,6 +52,7 @@
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response)
                     table.ajax.reload();
                     $('#add_student_modal').modal('hide');
                     toastr.success(response.success);
@@ -79,6 +81,7 @@
             success: function(response) {
                 let student = response.student;
                 $('#edit_student_modal #student_id').val(student.id);
+                $('#edit_student_modal #student_code').val(student.student_id);
                 $('#edit_student_modal #student_name').val(student.name);
                 $('#edit_student_modal #student_phone').val(student.phone);
                 $('#edit_student_modal #student_email').val(student.email);

@@ -58,8 +58,12 @@
                             <div class="nav-author__options">
                                 <ul>
                                     <li>
-                                        <a href="#">
+                                        <a href="{{ route('admin.change.password') }}">
                                             <span data-feather="user"></span> Change Password</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.profile') }}">
+                                            <span data-feather="user"></span>Update Profile</a>
                                     </li>
                                 </ul>
                                 <a class="nav-author__signout" href="{{ route('admin.logout') }}"

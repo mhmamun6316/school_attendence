@@ -31,7 +31,7 @@
                                     <span class="input-icon icon-left">
                                         <span data-feather="calendar"></span>
                                     </span>
-                                    <input type="text" class="form-control form-control-default date-ranger" name="date-ranger" placeholder="{{ $currentDate }}">
+                                    <input type="text" class="form-control form-control-default" placeholder="{{ $currentDate }}">
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 @else
-                    <h2>You don't have permission to view the statistics data</h2>
+                    <h3>You don't have permission to view the statistics data</h3>
                 @endpermission
             </div>
         </div>
