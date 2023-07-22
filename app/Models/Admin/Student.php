@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Student extends BaseModel
 {
     use HasFactory;
-    protected $fillable = ['name', 'avatar', 'phone', 'email', 'address', 'guardian_phone', 'guardian_email', 'organization_id'];
+    protected $fillable = ['name', 'student_id','avatar', 'phone', 'email', 'address', 'guardian_phone', 'guardian_email', 'organization_id'];
 
     public function organization()
     {
