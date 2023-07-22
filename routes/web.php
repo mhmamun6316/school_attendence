@@ -31,6 +31,11 @@ Route::get('/',[DashboardController::class,'index'])->name('dashboard')->middlew
 
 //authenticated route
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/change/password', [AuthController::class, 'changePassword'])->name('change.password');
+    Route::post('/change/password', [AuthController::class, 'saveChangePassword'])->name('save.change.password');
+    Route::get('/profile',  [AuthController::class, 'profile'])->name('profile');
+    Route::post('/update/profile',  [AuthController::class, 'updateProfile'])->name('update.profile');
+
     Route::post('/logout',[DashboardController::class,'logout'])->name('logout');
 
     Route::resource('users',UserController::class);
@@ -58,4 +63,5 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
     Route::get('bills',[BillController::class,'bill'])->name('bills');
     Route::post('bills/list',[BillController::class,'billList'])->name('bills.list');
+    Route::get('organization/bill/{id}',[BillController::class,'organizationPdf'])->name('organization.bill');
 });

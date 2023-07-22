@@ -41,5 +41,13 @@
 <!-- endinject-->
 
 </body>
+<script>
+    $(document).ready(function() {
+        $('.nav-link').click(function(e) {
+            $('.nav-item').removeClass('active');
+            $(this).closest('.nav-link').addClass('active');
+        });
+    });
+</script>
 
 </html>
