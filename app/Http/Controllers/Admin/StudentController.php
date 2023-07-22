@@ -43,7 +43,7 @@ class StudentController extends Controller
         return DataTables::of($students)
             ->addIndexColumn()
             ->editColumn('organization', function ($students){
-                return '<span class="custom-badge">' . $students->organization->name . '</span>';
+                return '<span class="custom-badge">' . str_replace(' ', '_', $students->organization->name) . '</span>';
             })
             ->editColumn('package', function ($students){
                 $package = $students->activePackage->first();
@@ -128,21 +128,22 @@ class StudentController extends Controller
         }
 
         $validator = Validator::make($request->all(),[
-            'name' => 'required|max:255',
+            'name' => 'required|max:191',
+            'student_id' => 'required|unique:students|max:191',
             'avatar' => 'nullable|image|max:2048',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string|max:255',
-            'guardian_name' => 'nullable|string|max:255',
-            'guardian_phone' => 'nullable|string|max:255',
-            'guardian_email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:191',
+            'email' => 'nullable|email|max:191',
+            'address' => 'nullable|string|max:191',
+            'guardian_name' => 'nullable|string|max:191',
+            'guardian_phone' => 'nullable|string|max:191',
+            'guardian_email' => 'nullable|email|max:191',
         ]);
 
         if ($validator->fails()) {
             $errors = $validator->errors();
             $firstError = $errors->first();
 
-            return back()->with(['error' => $firstError], 422);
+            return response()->json(['error' => $firstError], 422);
         }
 
         // Upload the avatar image if provided
@@ -156,6 +157,7 @@ class StudentController extends Controller
             // Create a new student
             $student = Student::create([
                 'name' => $request->name,
+                'student_id' => $request->student_id,
                 'avatar' => $avatarPath,
                 'phone' => $request->phone,
                 'email' => $request->email,
@@ -209,21 +211,22 @@ class StudentController extends Controller
         }
 
         $validator = Validator::make($request->all(),[
-            'name' => 'required|max:255',
+            'name' => 'required|max:191',
+            'student_code' => 'required|max:191|unique:students,student_id,'.$id,
             'avatar' => 'nullable|image|max:2048',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'nullable|string|max:255',
-            'guardian_name' => 'nullable|string|max:255',
-            'guardian_phone' => 'nullable|string|max:255',
-            'guardian_email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:191',
+            'email' => 'nullable|email|max:191',
+            'address' => 'nullable|string|max:191',
+            'guardian_name' => 'nullable|string|max:191',
+            'guardian_phone' => 'nullable|string|max:191',
+            'guardian_email' => 'nullable|email|max:191',
         ]);
 
         if ($validator->fails()) {
             $errors = $validator->errors();
             $firstError = $errors->first();
 
-            return back()->with(['error' => $firstError], 422);
+            return response()->json(['error' => $firstError], 422);
         }
 
         $avatarPath = null;
@@ -266,6 +269,7 @@ class StudentController extends Controller
 
             $student->update([
                 'name' => $request->name,
+                'student_id' => $request->student_code,
                 'avatar' => $avatarPath,
                 'phone' => $request->phone,
                 'email' => $request->email,

@@ -8,6 +8,7 @@ use App\Models\Admin\Attendence;
 use App\Models\Admin\Device;
 use App\Models\Admin\Organization;
 use App\Models\Admin\Student;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -71,7 +72,7 @@ class AttendenceController extends Controller
         if ($authUser->isSuperAdmin()){
             $organizations = Organization::latest()->get();
         }else{
-            $organizations = Organization::findOrFail($authUser->organization_id);
+            $organizations = Organization::where('id',$authUser->organization_id)->get();
         }
 
         $students = Student::FilterByOrganization()->latest()->get();
@@ -87,7 +88,34 @@ class AttendenceController extends Controller
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
 
+        $requestData = $request->all();
+        $organization = $requestData['columns'][0]['search']['value'];
+        $device = $requestData['columns'][1]['search']['value'];
+        $student = $requestData['columns'][2]['search']['value'];
+        $startDate = $requestData['columns'][3]['search']['value'];
+        $endDate = $requestData['columns'][4]['search']['value'];
+
         $attendances = Attendence::FilterByOrganization()->latest();
+
+        if ($organization) {
+            $attendances->where('organization_id',$organization);
+        }
+        if ($device) {
+            $attendances->where('device_id', $device);
+        }
+        if ($student) {
+            $attendances->where('student_id', $student);
+        }
+
+
+        if ($startDate) {
+            $startDate = Carbon::parse($startDate);
+            $attendances->where('arrived_time', '>=', $startDate->startOfDay());
+        }
+        if ($endDate) {
+            $endDate = Carbon::parse($endDate);
+            $attendances->where('arrived_time', '<=', $endDate->endOfDay());
+        }
 
         return DataTables::of($attendances)
             ->addIndexColumn()
