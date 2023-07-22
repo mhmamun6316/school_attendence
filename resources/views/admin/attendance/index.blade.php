@@ -10,10 +10,9 @@
             <!-- data table start -->
             <div class="col-12 mt-4">
                 <div class="card">
-                    <div class="card-header flex-column">
-                        <h2 class="py-4">Attendances List</h2>
+                    <div class="card-header pt-4 flex-column">
                         <div class="filter-container row w-100">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Organizations</label>
                                     <select class="organization form-control" id="organization">
@@ -24,7 +23,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Device</label>
                                     <select class="device form-control" id="device">
@@ -35,7 +34,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Students</label>
                                     <select class="student form-control" id="student">
@@ -46,9 +45,21 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="date" class="form-control" name="start_date">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="date" class="form-control" name="end_date">
+                                </div>
+                            </div>
                             <div class="col-md-3 d-flex align-items-end">
                                 <div class="form-group">
-                                    <a class="btn btn-success btn-sm text-white">Search</a>
+                                    <a class="btn btn-success btn-sm text-white" id="searchBtn">Search</a>
                                 </div>
                             </div>
                         </div>
@@ -113,6 +124,24 @@
                     {data: 'time', name: 'time'},
                 ]
             });
+        });
+
+        $('#searchBtn').click(function (){
+            let organization = $("#organization  :selected").val();
+            let device = $("#device  :selected").val();
+            let student = $("#student  :selected").val();
+            let start_date = $('[name="start_date"]').val();
+            let end_date = $('[name="end_date"]').val();
+
+            $('.yajra-datatable').DataTable()
+                .column(0).search(organization)
+                .column(1).search(device)
+                .column(2).search(student)
+                .column(3).search(start_date)
+                .column(4).search(end_date)
+                .columns
+                .adjust()
+                .draw();
         });
     </script>
 @endsection

@@ -24,8 +24,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
+                                    <th>StudentId</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
                                     <th>Organization</th>
                                     <th>Package</th>
                                     <th>Action</th>
@@ -53,8 +53,8 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="name">Name</label>
-                                            <input type="text" name="name" id="name" class="form-control" required>
+                                            <label for="name">Name <span class="required">*</span></label>
+                                            <input placeholder="name" type="text" name="name" id="name" class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -66,7 +66,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
-                                            <input type="text" name="phone" id="phone" class="form-control">
+                                            <input placeholder="phone number" type="text" name="phone" id="phone" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -74,13 +74,13 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="email" name="email" id="email" class="form-control">
+                                            <input placeholder="email" type="email" name="email" id="email" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <input type="text" name="address" id="address" class="form-control">
+                                            <input placeholder="address" type="text" name="address" id="address" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -106,6 +106,12 @@
                                                     <option value="{{ $package->id }}">{{ $package->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="student_id">Student Id <span class="required">*</span></label>
+                                            <input type="text" name="student_id" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -187,6 +193,12 @@
                                                     <option value="{{ $package->id }}">{{ $package->name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="student_id">Student Id <span class="required">*</span></label>
+                                            <input type="text" name="student_code" id="student_code" class="form-control">
                                         </div>
                                     </div>
                                 </div>

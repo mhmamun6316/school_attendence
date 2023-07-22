@@ -19,6 +19,7 @@
                                     <th>Organization Name</th>
                                     <th>Due Amount</th>
                                     <th>Students</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -64,6 +65,7 @@
                     {data: 'organization', name: 'organization'},
                     {data: 'dueAmount', name: 'dueAmount'},
                     {data: 'students', name: 'students'},
+                    {data: 'action', name: 'action'},
                 ]
             });
         });
