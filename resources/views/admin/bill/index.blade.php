@@ -16,6 +16,7 @@
                             <table class="table table-bordered yajra-datatable">
                                 <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>Organization Name</th>
                                     <th>Due Amount</th>
                                     <th>Students</th>
@@ -62,6 +63,7 @@
                     }
                 },
                 columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'organization', name: 'organization'},
                     {data: 'dueAmount', name: 'dueAmount'},
                     {data: 'students', name: 'students'},

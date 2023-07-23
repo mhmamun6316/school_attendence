@@ -216,6 +216,7 @@ class BillController extends Controller
                 $assignmentsArray[] = [
                     'student_name' => $student->name,
                     'package_name' => $assignment->name,
+                    'package_price' => $assignment->price,
                     'start_date' => $startDate->format('Y-m-d'),
                     'end_date' => $endDate ? $endDate->format('Y-m-d') : null,
                     'days_used' => $daysInPreviousMonth,

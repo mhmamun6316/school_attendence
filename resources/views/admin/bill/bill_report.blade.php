@@ -215,6 +215,7 @@
         <tr>
             <th>Student Name</th>
             <th>Package Name</th>
+            <th>Package Price</th>
             <th>Start Date</th>
             <th>End Date</th>
             <th>Days Used</th>
@@ -226,6 +227,7 @@
             <tr>
                 <td>{{ $assignment['student_name'] }}</td>
                 <td>{{ $assignment['package_name'] }}</td>
+                <td>{{ $assignment['package_price'] }}</td>
                 <td>{{ $assignment['start_date'] }}</td>
                 <td>{{ $assignment['end_date'] }}</td>
                 <td>{{ $assignment['days_used'] }}</td>
@@ -233,7 +235,7 @@
             </tr>
         @endforeach
         <tr>
-            <td colspan="5">GRAND TOTAL</td>
+            <td colspan="6">GRAND TOTAL</td>
             <td>{{ $totalDueAmount }}</td>
         </tr>
         </tbody>
