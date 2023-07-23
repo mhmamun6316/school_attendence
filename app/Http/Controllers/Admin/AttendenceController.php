@@ -30,21 +30,28 @@ class AttendenceController extends Controller
         $timestamp     = $request->timestamp;
 
         if (!isset($device_id)) {
-            return response()->json(['error' => 'device number Not Exists!'], 404);
+            return response()->json(['error' => 'device number Not Exists!'], 422);
         }
         if (!isset($student_id)) {
-            return response()->json(['error' => 'Student Id Not Exists!'], 404);
+            return response()->json(['error' => 'Student Id Not Exists!'], 422);
         }
         if (!isset($timestamp)) {
-            return response()->json(['error' => 'Timestamp Not Exists!'], 404);
+            return response()->json(['error' => 'Timestamp Not Exists!'], 422);
         }
 
         $device = Device::where('device_number', $device_id)->first();
         if(!$device){
-            return response()->json(['error' => 'Device is not found!!'], 404);
+            return response()->json(['error' => 'Device is not found!!'], 422);
         }
 
-        $student = Student::findOrFail($student_id);
+        $student = Student::where('student_id',$student_id)->first();
+        if(!$student){
+            return response()->json(['error' => 'Student is not found!!'], 422);
+        }
+
+        if ($student->organization_id != $device->organization_id){
+            return response()->json(['error' => 'Student is not found!!'], 422);
+        }
 
         if ($student->guardian_email)
         {
@@ -106,7 +113,6 @@ class AttendenceController extends Controller
         if ($student) {
             $attendances->where('student_id', $student);
         }
-
 
         if ($startDate) {
             $startDate = Carbon::parse($startDate);
