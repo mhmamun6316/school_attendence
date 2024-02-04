@@ -23,6 +23,6 @@ class Attendence extends BaseModel
 
     public function student()
     {
-        return $this->belongsTo(Student::class,'student_id','student_id');
+        return $this->belongsTo(Student::class);
     }
 }

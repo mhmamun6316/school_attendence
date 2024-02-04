@@ -11,6 +11,7 @@ use App\Models\Admin\Student;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\DataTables;
 
@@ -59,9 +60,9 @@ class AttendenceController extends Controller
                 ->send(new AttendanceMail());
         }
 
-        Attendence::create([
+        DB::table('attendences')->insertOrIgnore([
             'device_id' => $device->id,
-            'student_id' => $student_id,
+            'student_id' => $student->id,
             'organization_id' => $device->organization_id,
             'arrived_time' => $timestamp
         ]);
