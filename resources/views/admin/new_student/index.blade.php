@@ -50,7 +50,8 @@
             </div>
 
             {{--adding user modal--}}
-            <div class="modal-basic modal fade show" id="add_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-basic modal fade show" id="add_student_modal" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
@@ -64,7 +65,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name">Name <span class="required">*</span></label>
-                                            <input placeholder="name" type="text" name="name" id="name" class="form-control" required>
+                                            <input placeholder="name" type="text" name="name" id="name"
+                                                   class="form-control" required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -76,7 +78,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
-                                            <input placeholder="phone number" type="text" name="phone" id="phone" class="form-control">
+                                            <input placeholder="phone number" type="text" name="phone" id="phone"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -84,19 +87,22 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input placeholder="email" type="email" name="email" id="email" class="form-control">
+                                            <input placeholder="email" type="email" name="email" id="email"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <input placeholder="address" type="text" name="address" id="address" class="form-control">
+                                            <input placeholder="address" type="text" name="address" id="address"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="guardian_name">Guardian Phone</label>
-                                            <input type="text" name="guardian_phone" id="guardian_phone" class="form-control">
+                                            <input type="text" name="guardian_phone" id="guardian_phone"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +110,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="guardian_email">Guardian Email</label>
-                                            <input type="email" name="guardian_email" id="guardian_email" class="form-control">
+                                            <input type="email" name="guardian_email" id="guardian_email"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -132,8 +139,11 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" id="save_student_Btn" class="btn btn-primary btn-sm">Save changes</button>
-                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+                                <button type="submit" id="save_student_Btn" class="btn btn-primary btn-sm">Save
+                                    changes
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -141,7 +151,8 @@
             </div>
 
             {{--editing user modal--}}
-            <div class="modal-basic modal fade show" id="edit_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-basic modal fade show" id="edit_student_modal" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-lg " role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
@@ -156,7 +167,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="text" name="name" id="student_name" class="form-control" required>
+                                            <input type="text" name="name" id="student_name" class="form-control"
+                                                   required>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -188,7 +200,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="guardian_name">Guardian Phone</label>
-                                            <input type="text" name="guardian_phone" id="student_guardian_phone" class="form-control">
+                                            <input type="text" name="guardian_phone" id="student_guardian_phone"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -196,7 +209,8 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="guardian_email">Guardian Email</label>
-                                            <input type="email" name="guardian_email" id="student_guardian_email" class="form-control">
+                                            <input type="email" name="guardian_email" id="student_guardian_email"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -213,13 +227,15 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="student_id">Student Id <span class="required">*</span></label>
-                                            <input type="text" name="student_code" id="student_code" class="form-control">
+                                            <input type="text" name="student_code" id="student_code"
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel
+                                </button>
                                 <button type="submit" class="btn btn-sm btn-primary">Save</button>
                             </div>
                         </form>
@@ -228,7 +244,8 @@
             </div>
 
             {{--confirm modal--}}
-            <div class="modal-info-delete modal fade show" id="delete_student_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-info-delete modal fade show" id="delete_student_modal" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-sm modal-info" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -242,15 +259,19 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-outlined btn-sm" data-dismiss="modal">No</button>
-                            <button type="button" id="confirm_delete" class="btn btn-success btn-outlined btn-sm" data-dismiss="modal">Yes</button>
+                            <button type="button" class="btn btn-danger btn-outlined btn-sm" data-dismiss="modal">No
+                            </button>
+                            <button type="button" id="confirm_delete" class="btn btn-success btn-outlined btn-sm"
+                                    data-dismiss="modal">Yes
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{--for history modal--}}
-            <div class="modal-basic modal fade show" id="student_history_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-basic modal fade show" id="student_history_modal" tabindex="-1" role="dialog"
+                 aria-hidden="true">
                 <div class="modal-dialog modal-md" role="document">
                     <div class="modal-content modal-bg-white ">
                         <div class="modal-header">
@@ -260,17 +281,19 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="close_btn btn btn-sm btn-secondary" data-dismiss="modal">Ok</button>
+                            <button type="button" class="close_btn btn btn-sm btn-secondary" data-dismiss="modal">Ok
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 @endsection
 
 @section('script')
 
-    @include('admin.student.partials.script')
+    @include('admin.new_student.partials.script')
 
 @endsection

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 8, 2);
-            $table->boolean('status')->default(true);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

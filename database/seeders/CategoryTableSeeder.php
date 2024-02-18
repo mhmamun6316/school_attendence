@@ -6,7 +6,7 @@ use App\Models\Admin\Category;
 use App\Models\Admin\Package;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class CategoryTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

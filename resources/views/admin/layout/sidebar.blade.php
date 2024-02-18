@@ -65,10 +65,16 @@
         @endpermission
 
         @permission('student.view')
+{{--        <li>--}}
+{{--            <a href="{{ route('admin.students.index') }}" @activeRoute('admin.students.index') class="active" @endactiveRoute>--}}
+{{--                <span data-feather="user" class="nav-icon"></span>--}}
+{{--                <span class="menu-text">Students</span>--}}
+{{--            </a>--}}
+{{--        </li>--}}
         <li>
-            <a href="{{ route('admin.students.index') }}" @activeRoute('admin.students.index') class="active" @endactiveRoute>
-                <span data-feather="user" class="nav-icon"></span>
-                <span class="menu-text">Students</span>
+            <a href="{{ route('admin.students.new_students') }}" @activeRoute('admin.students.new_students') class="active" @endactiveRoute>
+            <span data-feather="user" class="nav-icon"></span>
+            <span class="menu-text">Students</span>
             </a>
         </li>
         @endpermission

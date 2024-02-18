@@ -54,7 +54,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::post('/packages/list',[PackageController::class,'packageList'])->name('packages.list');
 
     Route::resource('students',StudentController::class);
-    Route::post('/students/list',[StudentController::class,'studentList'])->name('students.list');
+    Route::get('/all/students',[StudentController::class,'newStudent'])->name('students.new_students');
+    Route::post('/all/students/list',[StudentController::class,'newStudentList'])->name('students.new_students.list');
+
     Route::get('/students/log/{id}',[StudentController::class,'studentLog'])->name('students.log');
     Route::get('/students/deactive/{id}',[StudentController::class,'studentDeactive'])->name('students.deactive');
 

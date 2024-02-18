@@ -1,4 +1,86 @@
 <script>
+    $(document).ready(function() {
+        loadOrganizationTree();
+    });
+
+    function loadOrganizationTree() {
+        $.ajax({
+            url: "{{ route('admin.organizations.list') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                let formattedData = formatOrganizationData(response);
+                $('.organization_tree').jstree({
+                    core: {
+                        data: formattedData
+                    },
+                    plugins: ['types'],
+                    types: {
+                        'last-child': {
+                            icon: 'jstree-icon jstree-themeicon jstree-themeicon-custom'
+                        }
+                    }
+                }).on('select_node.jstree', function(e, data) {
+                    let selectedOrganizationId = data.node.id;
+
+                    $('.selected_organization').val(selectedOrganizationId);
+                });
+            },
+            error: function(xhr) {
+                toastr.error('Error loading organization data. Please try again.');
+            }
+        });
+    }
+
+    function formatOrganizationData(data) {
+        let formattedData = [];
+
+        function formatChildren(children) {
+            let formattedChildren = [];
+
+            children.forEach(function(child) {
+                let formattedChild = {
+                    id: child.id,
+                    text: child.name,
+                    address: child.address,
+                    children: formatChildren(child.children_recursive),
+                    state: {
+                        opened: true
+                    }
+                };
+
+                if (formattedChild.children.length === 0) {
+                    formattedChild.icon = 'jstree-icon jstree-themeicon jstree-themeicon-custom';
+                }
+
+                formattedChildren.push(formattedChild);
+            });
+
+            return formattedChildren;
+        }
+
+        data.forEach(function(org) {
+            let formattedOrg = {
+                id: org.id,
+                text: org.name,
+                address: org.address,
+                children: formatChildren(org.children_recursive),
+                state: {
+                    opened: true
+                }
+            };
+
+            if (formattedOrg.children.length === 0) {
+                formattedOrg.icon = 'jstree-icon jstree-themeicon jstree-themeicon-custom';
+            }
+
+            formattedData.push(formattedOrg);
+        });
+
+        return formattedData;
+    }
+</script>
+<script>
     let csrfToken = $('meta[name="csrf-token"]').attr('content');
     let table;
 

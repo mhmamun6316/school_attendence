@@ -51,7 +51,7 @@ class User extends Authenticatable
     ];
 
     const ROLES = [
-        'super_admin' => 6
+        'super_admin' => 2
     ];
 
     public function roles()

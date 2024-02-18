@@ -8,7 +8,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Student extends BaseModel
 {
     use HasFactory;
-    protected $fillable = ['name', 'student_id','avatar', 'phone', 'email', 'address', 'guardian_phone', 'guardian_email', 'organization_id'];
+    protected $fillable = [
+        'name',
+        'student_id',
+        'avatar',
+        'phone',
+        'email',
+        'address',
+        'guardian_phone',
+        'guardian_email',
+        'organization_id',
+        'is_archived'
+    ];
 
     public function organization()
     {
@@ -29,5 +40,24 @@ class Student extends BaseModel
         return $this->belongsToMany(Package::class, 'student_package')
             ->wherePivot('active_status', true)
             ->withPivot(['active_status', 'start_date', 'end_date']);
+    }
+
+    public function studentPackages()
+    {
+        return $this->belongsToMany(Package::class, 'student_package');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($student) {
+            $student->studentPackages()->detach();
+        });
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendence::class);
     }
 }

@@ -58,7 +58,7 @@
                                                     <div class="form-group mb-15">
                                                         <label for="password-field">password</label>
                                                         <div class="position-relative">
-                                                            <input id="password-field" type="password" class="form-control" name="password" value="secret">
+                                                            <input id="password-field" type="password" class="form-control" name="password" placeholder="password">
                                                             <div class="fa fa-fw fa-eye-slash text-light fs-16 field-icon toggle-password2" id="toggle-password"></div>
                                                         </div>
                                                     </div>

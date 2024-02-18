@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('student_id');
             $table->unsignedBigInteger('organization_id');
             $table->dateTime('arrived_time');
+            $table->tinyInteger('is_archived')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

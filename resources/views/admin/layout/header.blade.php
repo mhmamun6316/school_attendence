@@ -4,35 +4,15 @@
         <div class="navbar-left">
             <a href="#" class="sidebar-toggle">
                 <img class="svg" src="{{ asset('backend') }}/img/svg/bars.svg" alt="img"></a>
-            <a class="navbar-brand" href="#"><img class="svg dark" src="{{ asset('backend') }}/img/svg/logo_dark.svg" alt="svg"><img class="light" src="{{ asset('backend') }}/img/logo_white.png" alt="img"></a>
+{{--    removed the dashboard logo    --}}
+{{--            <a class="navbar-brand" href="#"><img class="svg dark" src="{{ asset('backend') }}/img/svg/logo_dark.svg" alt="svg"><img class="light" src="{{ asset('backend') }}/img/logo_white.png" alt="img"></a>--}}
+            <a class="navbar-brand">Attendance Management System</a>
             <div class="top-menu">
 
                 <div class="strikingDash-top-menu position-relative">
                     <ul>
                         <li class="has-subMenu">
                             <a href="#" class="active">Dashboard</a>
-                        </li>
-
-
-                        <li class="has-subMenu">
-                            <a href="#" class="">Crud</a>
-                            <ul class="subMenu">
-                                <li class="has-subMenu-left">
-                                    <a href="#" class="">
-                                        <span data-feather="shopping-cart" class="nav-icon"></span>
-                                        <span class="menu-text">Firestore Crud</span>
-                                    </a>
-                                    <ul class="subMenu">
-                                        <li>
-                                            <a class="" href="firestore.html">View All</a>
-                                        </li>
-                                        <li>
-                                            <a class="" href="firestore-add.html">Add
-                                                New</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -43,6 +23,7 @@
 
         <div class="navbar-right">
             <ul class="navbar-right__menu">
+                <h6>{{ auth()->user()->name }}</h6>
                 <li class="nav-author">
                     <div class="dropdown-custom">
                         <a href="javascript:;" class="nav-item-toggle"><img src="{{ asset('backend') }}/img/author-nav.jpg" alt="" class="rounded-circle"></a>

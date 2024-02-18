@@ -9,7 +9,7 @@ class Device extends BaseModel
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name','description','device_number','is_archived'];
 
     public function organization()
     {

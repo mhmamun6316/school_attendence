@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->tinyInteger('is_archived')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
-
-            $table->foreign('parent_id')->references('id')->on('organizations')->onDelete('cascade');
         });
     }
 

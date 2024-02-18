@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -25,12 +26,12 @@ class DeviceController extends Controller
 
     public function deviceList()
     {
-        $devices = Device::filterByOrganization()->latest()->get();
         $authUser = auth()->user();
-
         if (!$authUser->isSuperAdmin() && !$authUser->hasPermission('device.view')){
             return response()->json(['error' => "you are not authorized for this page"], 403);
         }
+
+        $devices = Device::filterByOrganization()->where('is_archived',0)->latest()->get();
 
         return DataTables::of($devices)
             ->addIndexColumn()
@@ -77,6 +78,7 @@ class DeviceController extends Controller
             return response()->json(['error' => $firstError], 422);
         }
 
+        DB::beginTransaction();
         try{
             $device = new Device();
             $device->name = $request->name;
@@ -85,9 +87,12 @@ class DeviceController extends Controller
             $device->organization_id = $request->organization_id;
             $device->save();
 
+            DB::commit();
             return response()->json(['success'=>"Device Added Successfully"]);
         }catch(Exception $e){
+            DB::rollBack();
             Log::info("device adding error:".$e->getLine());
+            Log::info("device adding error:".$e->getMessage());
             return response()->json(['error'=>$e->getMessage()],500);
         }
     }

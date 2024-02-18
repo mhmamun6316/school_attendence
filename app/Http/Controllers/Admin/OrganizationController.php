@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Exception;
@@ -122,13 +123,31 @@ class OrganizationController extends Controller
             return response()->json(['error'=>"Organization Not Found"],404);
         }
 
+        DB::beginTransaction();
         try{
             if($organization->parent_id === 0){
                 return response()->json(['error'=>"Can't Delete Parent Organization"],404);
             }
+
+            // checking associated records
+            if ($organization->users()->exists()) {
+                return response()->json(['error'=>"Cannot delete organization with associated users."],404);
+            }
+
+            if ($organization->students()->exists()) {
+                return response()->json(['error'=>"Cannot delete organization with associated students."],404);
+            }
+
+            if ($organization->devices()->exists()){
+                $organization->devices()->update(['is_archived' => 1]);
+            }
+
             $organization->delete();
+
+            DB::commit();
             return response()->json(['success'=>"Organization Deleted Successfully"]);
         }catch(Exception $e){
+            DB::rollBack();
             Log::debug("Error in organization delete:".$e->getMessage());
             Log::debug("Error in organization delete:".$e->getLine());
             return response()->json(['error'=>$e->getMessage()],500);

@@ -19,12 +19,9 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('device_number');
             $table->unsignedBigInteger('organization_id');
+            $table->tinyInteger('is_archived')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
-
-            $table->foreign('organization_id')
-                ->references('id')
-                ->on('organizations')
-                ->onDelete('cascade');
         });
     }
 

@@ -20,10 +20,9 @@ return new class extends Migration
             $table->boolean('active_status')->default(false);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->tinyInteger('is_archived')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
-
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
 
             $table->unique(['student_id', 'package_id', 'history_id']);
         });
